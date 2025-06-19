@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Chatbot Matchstaff Flotante</title>
+<style>
+  /* Botón flotante */
+  #chatbotButton {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+  }
+
+  /* Ventana de chat */
+  #chatbotWindow {
+    position: fixed;
+    bottom: 95px;
+    right: 25px;
+    width: 320px;
+    max-height: 450px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+  }
+
+  /* Header */
+  #chatbotHeader {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 16px;
+    font-weight: bold;
+    font-size: 18px;
+    user-select: none;
+  }
+
+  /* Área mensajes */
+  #chatbotMessages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9f9f9;
+  }
+
+  /* Input y botón enviar */
+  #chatbotInputArea {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fff;
+  }
+
+  #chatbotInput {
+    flex: 1;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+
+  #chatbotSendBtn {
+    margin-left: 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    font-weight: bold;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Mensajes */
+  .message {
+    margin: 8px 0;
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    clear: both;
+    word-wrap: break-word;
+  }
+
+  .message.bot {
+    background-color: #e1e1e1;
+    float: left;
+    border-bottom-left-radius: 0;
+  }
+
+  .message.user {
+    background-color: #007bff;
+    color: white;
+    float: right;
+    border-bottom-right-radius: 0;
+  }
+</style>
+</head>
+<body>
+
+<button id="chatbotButton" aria-label="Abrir chat">💬</button>
+
+<div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader">
+  <div id="chatbotHeader">Chatbot Matchstaff</div>
+  <div id="chatbotMessages" aria-live="polite" aria-atomic="true"></div>
+  <div id="chatbotInputArea">
+    <input id="chatbotInput" type="text" placeholder="Escribe tu respuesta..." aria-label="Entrada de texto"/>
+    <button id="chatbotSendBtn" aria-label="Enviar mensaje">Enviar</button>
+  </div>
+</div>
+
+<script>
+  const apiUrl = "https://chatboterr-3cbv.onrender.com";
+
+  const btn = document.getElementById('chatbotButton');
+  const chatWindow = document.getElementById('chatbotWindow');
+  const messagesContainer = document.getElementById('chatbotMessages');
+  const input = document.getElementById('chatbotInput');
+  const sendBtn = document.getElementById('chatbotSendBtn');
+
+  let questions = [];
+  let currentIndex = 0;
+  const answers = {};
+
+  // Mostrar/ocultar ventana chat
+  btn.addEventListener('click', () => {
+    if (chatWindow.style.display === 'flex') {
+      chatWindow.style.display = 'none';
+    } else {
+      chatWindow.style.display = 'flex';
+      input.focus();
+      if (messagesContainer.innerHTML === '') {
+        startChat();
+      }
+    }
+  });
+
+  // Mostrar mensaje en chat
+  function addMessage(text, sender = 'bot') {
+    const msg = document.createElement('div');
+    msg.classList.add('message', sender);
+    msg.textContent = text;
+    messagesContainer.appendChild(msg);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  // Cargar preguntas desde backend
+  async function loadQuestions() {
+    try {
+      const res = await fetch(`${apiUrl}/get_questions`);
+      if (!res.ok) throw new Error('Error al cargar preguntas');
+      questions = await res.json();
+    } catch (e) {
+      addMessage('No se pudieron cargar las preguntas. Intenta más tarde.', 'bot');
+    }
+  }
+
+  // Iniciar chat mostrando la primera pregunta
+  async function startChat() {
+    await loadQuestions();
+    if (questions.length > 0) {
+      currentIndex = 0;
+      addMessage(questions[currentIndex].pregunta, 'bot');
+    }
+  }
+
+  // Enviar respuesta y mostrar siguiente pregunta o enviar todo al backend
+  async function sendAnswer(answer) {
+    answers[questions[currentIndex].id] = answer;
+    addMessage(answer, 'user');
+    currentIndex++;
+    if (currentIndex < questions.length) {
+      addMessage(questions[currentIndex].pregunta, 'bot');
+    } else {
+      addMessage('Enviando tus respuestas...', 'bot');
+      await submitAnswers();
+    }
+  }
+
+  // Enviar todas las respuestas al backend
+  async function submitAnswers() {
+    try {
+      const res = await fetch(`${apiUrl}/submit_answers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(answers)
+      });
+      const data = await res.json();
+      addMessage(data.message, 'bot');
+    } catch {
+      addMessage('Error enviando respuestas. Intenta más tarde.', 'bot');
+    }
+    // Desactivar input al final
+    input.disabled = true;
+    sendBtn.disabled = true;
+  }
+
+  // Evento click botón enviar o enter en input
+  sendBtn.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (!text) return;
+    sendAnswer(text);
+    input.value = '';
+  });
+
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      sendBtn.click();
+    }
+  });
+</script>
+
+</body>
+</html>
