@@ -121,26 +121,10 @@ async function sendToGoogleSheets(data) {
 
     const result = await response.json();
     console.log('Google Sheets response:', result.message);
-    // Aquí puedes mostrar mensaje en tu chatbot:
     addMessage(result.message || 'Respuestas guardadas en Google Sheets.', 'bot');
   } catch (error) {
     console.error('Error enviando a Google Sheets:', error);
     addMessage('Error enviando respuestas a Google Sheets. Intenta más tarde.', 'bot');
-  }
-}
-
-
-  try {
-    // Enviar a Google Sheets
-    const resSheets = await fetch(googleSheetsWebhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers)
-    });
-    const dataSheets = await resSheets.json();
-    addMessage(dataSheets.message || '✔️ Respuestas guardadas en Sheets.', 'bot');
-  } catch {
-    addMessage('❌ Error enviando a Google Sheets. Intenta más tarde.', 'bot');
   }
 }
 
@@ -178,7 +162,9 @@ sendBtn.addEventListener('click', async () => {
       }[text];
       addMessage(respuesta, "bot");
       addMessage("🎉 Gracias por tu interés. Te contactaremos pronto.", "bot");
-      await submitAnswers();
+
+      await sendToGoogleSheets(answers); // Aquí llamo para enviar respuestas a Sheets
+
       addMessage("Escribe <b>reiniciar</b> si deseas volver a empezar o <b>finalizar</b> para cerrar el chat.", "bot");
       endChat();
     } else {
@@ -200,3 +186,4 @@ input.addEventListener('keydown', (e) => {
     sendBtn.click();
   }
 });
+
