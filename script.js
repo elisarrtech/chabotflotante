@@ -10,6 +10,15 @@ let questions = [];
 let currentIndex = -3;  // Estados: -3: inicio, -2: preguntar tiempo, -1: preguntar nombre, 0+: preguntas API
 const answers = {};
 
+// Abrir el chatbot automáticamente al cargar la página
+document.addEventListener("DOMContentLoaded", () => {
+  chatWindow.style.display = 'flex';
+  input.focus();
+  if (messagesContainer.innerHTML === '') {
+    startChat();
+  }
+});
+
 btn.addEventListener('click', () => {
   if (chatWindow.style.display === 'flex') {
     chatWindow.style.display = 'none';
