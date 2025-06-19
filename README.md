@@ -10,7 +10,7 @@ Este es un chatbot interactivo para **Matchstaff**, diseñado para agilizar la a
 
 ## 📸 Vista previa
 
-![Vista previa del chatbot](https://elisarrtech.github.io/chatbot_matchstaff/)) <!-- Reemplaza con tu URL real o sube la imagen al repositorio -->
+![Vista previa del chatbot](https://user-images.githubusercontent.com/your_username/your_screenshot.png) <!-- Reemplaza con tu URL real o sube la imagen al repositorio -->
 
 ---
 
@@ -23,96 +23,84 @@ Este es un chatbot interactivo para **Matchstaff**, diseñado para agilizar la a
 - 💬 Diseño responsivo y amigable
 - 🔘 Botón flotante de acceso rápido
 
-
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Tecnologías
 
-### Frontend
+### Frontend:
+- HTML + CSS personalizado
+- JavaScript puro (sin frameworks)
+- GitHub Pages para despliegue
 
-- HTML, CSS y JavaScript puro
-- Chatbox personalizado con botón flotante
-- Desplegado en [GitHub Pages](https://elisarrtech.github.io/chatbot_matchstaff/)
-
-### Backend
-
-- [Flask](https://flask.palletsprojects.com/) (API REST en Python)
-- [gspread](https://github.com/burnash/gspread) para conexión con Google Sheets
-- [Render](https://render.com/) para hosting gratuito
+### Backend:
+- Python con Flask
+- gspread + Google Sheets API
+- Render como hosting gratuito del backend
 
 ---
 
 ## 📁 Estructura del proyecto
 
 chatbot_matchstaff/
-├── index.html # Interfaz del chatbot
-├── style.css # Estilos del chatbot y botón flotante
-├── script.js # Lógica del flujo conversacional
+├── index.html # Chatbot UI
+├── style.css # Estilos del chatbot
+├── script.js # Flujo conversacional
 └── backend/
 ├── app.py # Servidor Flask
-├── service_account.json # Claves de Google Sheets
-└── requirements.txt # Dependencias del backend
-
+├── service_account.json # Credenciales de Google
+└── requirements.txt # Dependencias backend
 
 ---
 
-## ⚙️ Cómo correr el proyecto localmente
+## ⚙️ Instrucciones para desarrollo local
 
-### Requisitos:
+Crea un entorno virtual:
 
-- Python 3.8+
-- Cuenta de Google y acceso a Google Sheets API
-- Node.js (opcional para pruebas frontend locales)
-
-### 1. Clona el repositorio
-
-git clone https://github.com/elisarrtech/chatbot_matchstaff.git
-cd chatbot_matchstaff/backend
-
-2. Crea un entorno virtual
 bash
 Copiar
 Editar
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+Instala las dependencias:
 
-3. Instala dependencias
 bash
 Copiar
 Editar
 pip install -r requirements.txt
+Agrega tus credenciales de Google:
 
-4. Configura las credenciales
-Crea un proyecto en Google Cloud.
+Crea una cuenta de servicio en Google Cloud
 
-Activa la API de Google Sheets.
+Habilita la API de Google Sheets
 
-Descarga el archivo service_account.json y colócalo en la carpeta backend/.
+Descarga service_account.json y colócalo en /backend
 
-5. Ejecuta el servidor localmente
+Ejecuta el backend localmente:
+
 bash
 Copiar
 Editar
 python app.py
+Prueba el frontend abriendo index.html o visita el enlace en producción.
+
 🌐 Enlace en producción
 👉 https://elisarrtech.github.io/chatbot_matchstaff/
 
-✅ Pendientes por mejorar
-Autenticación para el backend
+✅ Mejoras futuras
+Autenticación y control de spam
 
-Manejo de errores con logs
+Dashboard de métricas para reclutadores
 
-Conexión con base de datos más robusta que Google Sheets (opcional)
+Multivacantes y rutas inteligentes
 
-Estadísticas y panel de visualización de postulantes
+Integración con bases de datos SQL
 
-📩 Contacto
-Elisarrtech — Desarrollo y automatización educativa y empresarial
+📬 Contacto
+Elisarrtech – Educación, Tecnología y Automatización
 📧 elisarrtech@gmail.com
+🌐 https://elisarrtech.com.mx
 
-Licencia
-Este proyecto es de código abierto bajo la licencia MIT.
-
-
+📄 Licencia
+Este proyecto está licenciado bajo los términos de la MIT License.
 
 
