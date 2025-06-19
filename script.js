@@ -1,5 +1,60 @@
+// Variables globales
+let currentIndex = -2; // Estado inicial para validar tiempo
+let questions = [];
+let answers = {};
+
+const input = document.getElementById("chatbotInput");
+const sendBtn = document.getElementById("chatbotSendBtn");
+const chatbotMessages = document.getElementById("chatbotMessages");
+
+// Función para añadir mensajes al chat
+function addMessage(text, sender) {
+  const div = document.createElement("div");
+  div.classList.add("message", sender);
+  div.innerHTML = text;
+  chatbotMessages.appendChild(div);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // scroll abajo
+}
+
+// Simula parseo de tiempo en minutos desde texto
+function parseTime(text) {
+  const match = text.match(/\d+/);
+  if (match) {
+    return parseInt(match[0], 10);
+  }
+  return null;
+}
+
+// Simula cargar preguntas desde backend (o estáticas)
+async function loadQuestions() {
+  // Aquí puedes hacer un fetch si tienes backend
+  // Para demo usaré preguntas estáticas (menos las excluidas)
+  questions = [
+    { id: "edad", pregunta: "¿Qué edad tienes?" },
+    { id: "correo", pregunta: "¿Cuál es tu correo electrónico?" },
+    { id: "escolaridad", pregunta: "¿Cuál es tu escolaridad?" },
+    { id: "colonia", pregunta: "¿En qué colonia vives?" },
+    { id: "experiencia", pregunta: "Cuéntame sobre tu experiencia laboral." },
+    { id: "ultimo_trabajo", pregunta: "¿Dónde fue tu último trabajo y por qué se terminó?" },
+    { id: "sueldo_anterior", pregunta: "¿Cuánto ganabas en tu último trabajo?" },
+    { id: "mayor_experiencia", pregunta: "¿Cuál consideras que es tu mayor experiencia en la industria?" }
+  ];
+}
+
+// Simula enviar respuestas a backend
+async function submitAnswers() {
+  try {
+    // Aquí enviarías con fetch a tu backend
+    console.log("Respuestas enviadas:", answers);
+  } catch (error) {
+    console.error("Error al enviar respuestas:", error);
+  }
+}
+
+// Lógica principal para procesar la respuesta
 async function sendAnswer(answer) {
   answer = answer.trim();
+  if (!answer) return; // no procesar texto vacío
 
   if (currentIndex === -2) {
     addMessage(answer, "user");
@@ -101,17 +156,34 @@ async function sendAnswer(answer) {
   }
 }
 
+// Eventos para abrir/cerrar ventana y enviar mensaje
 document.addEventListener("DOMContentLoaded", () => {
   const chatbotButton = document.getElementById("chatbotButton");
   const chatbotWindow = document.getElementById("chatbotWindow");
-  const chatbotInput = document.getElementById("chatbotInput");
 
   chatbotButton.addEventListener("click", () => {
     if (chatbotWindow.style.display === "flex") {
       chatbotWindow.style.display = "none";
     } else {
       chatbotWindow.style.display = "flex";
-      chatbotInput.focus();
+      input.focus();
     }
   });
+
+  sendBtn.addEventListener("click", () => {
+    const answer = input.value;
+    if (answer.trim() !== "") {
+      sendAnswer(answer);
+      input.value = "";
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      sendBtn.click();
+    }
+  });
+
+  // Mensaje inicial para comenzar el flujo
+  addMessage("Hola! ¿A cuánto tiempo está la empresa Kellogg’s desde tu casa? Por el momento no contamos con transporte.", "bot");
 });
