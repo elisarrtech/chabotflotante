@@ -110,16 +110,35 @@ function showVacancies() {
 }
 
 async function submitAnswers() {
+  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec';
+  const backendUrl = `${apiUrl}/submit_answers`;
+
   try {
-    const res = await fetch(`${apiUrl}/submit_answers`, {
+    // Enviar al backend
+    const resBackend = await fetch(backendUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(answers)
     });
-    const data = await res.json();
-    addMessage(data.message, 'bot');
+
+    const dataBackend = await resBackend.json();
+    addMessage(dataBackend.message || 'Respuestas enviadas al sistema.', 'bot');
   } catch {
-    addMessage('Error al enviar respuestas. Intenta más tarde.', 'bot');
+    addMessage('❌ Error al enviar respuestas al servidor. Intenta más tarde.', 'bot');
+  }
+
+  try {
+    // Enviar a Google Sheets
+    const resSheets = await fetch(googleSheetsWebhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(answers)
+    });
+
+    const dataSheets = await resSheets.json();
+    addMessage(dataSheets.message || '✔️ Respuestas guardadas en Sheets.', 'bot');
+  } catch {
+    addMessage('❌ Error enviando a Google Sheets. Intenta más tarde.', 'bot');
   }
 }
 
