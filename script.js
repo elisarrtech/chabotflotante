@@ -8,7 +8,8 @@ const sendBtn = document.getElementById('chatbotSendBtn');
 
 let questions = [];
 let currentIndex = -3;  // Estados: -3: inicial, -2: tiempo Kellogg's, -1: nombre, 0+ preguntas API
-const answers = {};
+let answers = {};
+let finalized = false;
 
 btn.addEventListener('click', () => {
   if (chatWindow.style.display === 'flex') {
@@ -16,28 +17,25 @@ btn.addEventListener('click', () => {
   } else {
     chatWindow.style.display = 'flex';
     input.focus();
-    if (messagesContainer.innerHTML === '') {
+    if (finalized || messagesContainer.innerHTML === '') {
+      resetChat();
       startChat();
     }
   }
 });
 
-// Función para agregar mensaje (bot usa innerHTML para formato)
+// Agrega mensaje al chat
 function addMessage(text, sender = 'bot') {
   const msg = document.createElement('div');
   msg.classList.add('message', sender);
-  if(sender === 'bot'){
-    let formatted = text
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-    msg.innerHTML = formatted;
-  } else {
-    msg.textContent = text;
-  }
+  msg.innerHTML = sender === 'bot'
+    ? text.replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    : text;
   messagesContainer.appendChild(msg);
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
+// Cargar preguntas desde backend
 async function loadQuestions() {
   try {
     const res = await fetch(`${apiUrl}/get_questions`);
@@ -49,7 +47,8 @@ async function loadQuestions() {
   }
 }
 
-async function startChat() {
+// Iniciar conversación
+function startChat() {
   addMessage("¡Hola! 👋 Gracias por tu interés en una vacante con MatchStaff.");
   addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
   addMessage("📌 *Nota:* Las vacantes disponibles actualmente son para trabajar cerca de la empresa Kellogg’s. Por el momento no contamos con transporte, por lo que es importante saber qué tan lejos te encuentras del lugar para evaluar si es viable para ti.");
@@ -57,6 +56,7 @@ async function startChat() {
   currentIndex = -2;
 }
 
+// Parsear tiempo o distancia
 function parseTime(answer) {
   let lower = answer.toLowerCase();
   let num = answer.match(/\d+/);
@@ -68,6 +68,7 @@ function parseTime(answer) {
   return num;
 }
 
+// Lógica principal de respuestas
 async function sendAnswer(answer) {
   if (currentIndex === -2) {
     addMessage(answer, "user");
@@ -82,6 +83,7 @@ async function sendAnswer(answer) {
       addMessage("Lo siento, las vacantes que tenemos son sólo para personas que vivan a menos de 30 minutos de Kellogg’s. Te agradecemos tu interés y te invitamos a estar pendiente de futuras oportunidades.", "bot");
       input.disabled = true;
       sendBtn.disabled = true;
+      finalized = true;
       return;
     }
 
@@ -100,29 +102,49 @@ async function sendAnswer(answer) {
     } else {
       addMessage("No hay preguntas para mostrar.", "bot");
     }
-  } else {
+
+  } else if (currentIndex < questions.length) {
     answers[questions[currentIndex].id] = answer;
     addMessage(answer, "user");
     currentIndex++;
     if (currentIndex < questions.length) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
-      addMessage("📣 Tenemos dos opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar). Ambas vacantes NO cuentan con transporte.", "bot");
-      addMessage("🔶 <b>1. PALETIZADOR</b><br>💲 Sueldo semanal: $2,355<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $211 semanal<br>🛍 Vales de despensa: $1,020 mensual<br>📚 Escolaridad requerida: PREPARATORIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $2,013<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
-      addMessage("🔹 <b>2. AYUDANTE GENERAL</b><br>💲 Sueldo semanal libre: $1,800 aprox<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $200 semanal<br>🛍 Vales de despensa: $892.70 mensual<br>📚 Escolaridad requerida: PRIMARIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $1,785<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
-      addMessage("📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.", "bot");
-      addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Paletizador<br>2️⃣ Ayudante general<br>3️⃣ Ambas vacantes<br>4️⃣ Solo quiero más información", "bot");
-
-      currentIndex = questions.length;  // Aquí se fija para esperar respuesta de selección
+      mostrarVacantes();
     }
   }
+}
+
+// Mostrar vacantes y opciones al final
+function mostrarVacantes() {
+  addMessage("📣 Tenemos dos opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar). Ambas vacantes NO cuentan con transporte.", "bot");
+  addMessage("🔶 <b>1. PALETIZADOR</b><br>💲 Sueldo semanal: $2,355<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $211 semanal<br>🛍 Vales de despensa: $1,020 mensual<br>📚 Escolaridad requerida: PREPARATORIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $2,013<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
+  addMessage("🔹 <b>2. AYUDANTE GENERAL</b><br>💲 Sueldo semanal libre: $1,800 aprox<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $200 semanal<br>🛍 Vales de despensa: $892.70 mensual<br>📚 Escolaridad requerida: PRIMARIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $1,785<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
+  addMessage("📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.", "bot");
+  addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Paletizador<br>2️⃣ Ayudante general<br>3️⃣ Ambas vacantes<br>4️⃣ Solo quiero más información", "bot");
+  currentIndex = questions.length;
 }
 
 sendBtn.addEventListener('click', async () => {
   const text = input.value.trim();
   if (!text) return;
+  
+  if (text.toLowerCase() === "reiniciar") {
+    resetChat();
+    startChat();
+    return;
+  }
 
-  console.log('currentIndex:', currentIndex, 'Input:', text);  // Para depurar
+  if (text.toLowerCase() === "finalizar") {
+    addMessage("✅ Chat finalizado. ¡Gracias por tu tiempo!", "bot");
+    input.disabled = true;
+    sendBtn.disabled = true;
+    finalized = true;
+    setTimeout(() => {
+      chatWindow.style.display = 'none';
+    }, 2000);
+    return;
+  }
 
   if (currentIndex >= questions.length) {
     addMessage(text, "user");
@@ -136,9 +158,8 @@ sendBtn.addEventListener('click', async () => {
       }
       addMessage(respuesta, "bot");
       addMessage("Muchas gracias por tu interés. Te contactaremos pronto con más detalles.", "bot");
+      addMessage("✅ Si ya terminaste, escribe <b>finalizar</b> para cerrar el chatbot.", "bot");
       await submitAnswers();
-      input.disabled = true;
-      sendBtn.disabled = true;
     } else {
       addMessage("Por favor responde con un número entre 1 y 4.", "bot");
     }
@@ -146,7 +167,6 @@ sendBtn.addEventListener('click', async () => {
     return;
   }
 
-  // Flujo normal
   await sendAnswer(text);
   input.value = "";
 });
@@ -170,4 +190,14 @@ async function submitAnswers() {
   } catch {
     addMessage('Error enviando respuestas. Intenta más tarde.', 'bot');
   }
+}
+
+// Resetear el estado del chatbot
+function resetChat() {
+  messagesContainer.innerHTML = "";
+  currentIndex = -3;
+  answers = {};
+  input.disabled = false;
+  sendBtn.disabled = false;
+  finalized = false;
 }
