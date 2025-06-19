@@ -144,19 +144,13 @@ sendBtn.addEventListener('click', async () => {
     return;
   }
 
-  input.disabled = true;
-  sendBtn.disabled = true;
-
+  // Flujo normal
   await sendAnswer(text);
-
   input.value = "";
-  input.disabled = false;
-  sendBtn.disabled = false;
-  input.focus();
 });
 
-input.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') {
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
     e.preventDefault();
     sendBtn.click();
   }
