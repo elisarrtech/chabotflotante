@@ -110,7 +110,7 @@ function showVacancies() {
 }
 
 async function sendToGoogleSheets(valuesArray) {
-  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec';
+  const googleSheetsWebhook = 'https://chatboterr-3cbv.onrender.com/guardar-en-sheets';
 
   try {
     const response = await fetch(googleSheetsWebhook, {
