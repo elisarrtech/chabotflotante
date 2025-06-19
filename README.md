@@ -55,32 +55,20 @@ chatbot_matchstaff/
 ## ⚙️ Instrucciones para desarrollo local
 
 Crea un entorno virtual:
-
-bash
-Copiar
-Editar
 python -m venv venv
 source venv/bin/activate  # En Windows: venv\Scripts\activate
+
 Instala las dependencias:
-
-bash
-Copiar
-Editar
 pip install -r requirements.txt
+
 Agrega tus credenciales de Google:
-
 Crea una cuenta de servicio en Google Cloud
-
 Habilita la API de Google Sheets
 
 Descarga service_account.json y colócalo en /backend
-
 Ejecuta el backend localmente:
-
-bash
-Copiar
-Editar
 python app.py
+
 Prueba el frontend abriendo index.html o visita el enlace en producción.
 
 🌐 Enlace en producción
