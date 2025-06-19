@@ -100,3 +100,18 @@ async function sendAnswer(answer) {
     }
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const chatbotButton = document.getElementById("chatbotButton");
+  const chatbotWindow = document.getElementById("chatbotWindow");
+  const chatbotInput = document.getElementById("chatbotInput");
+
+  chatbotButton.addEventListener("click", () => {
+    if (chatbotWindow.style.display === "flex") {
+      chatbotWindow.style.display = "none";
+    } else {
+      chatbotWindow.style.display = "flex";
+      chatbotInput.focus();
+    }
+  });
+});
