@@ -64,7 +64,7 @@ async function startChat() {
   addMessage("¡Hola! 👋 Gracias por tu interés en una vacante con MatchStaff.");
   addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
   addMessage("📌 *Nota:* Las vacantes disponibles actualmente son para trabajar cerca de la empresa Kellogg’s. Por el momento no contamos con transporte, por lo que es importante saber qué tan lejos te encuentras del lugar para evaluar si es viable para ti.");
-  addMessage("5️⃣ ¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s? (Puedes responder en minutos o kilómetros).");
+  addMessage("¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s? (Puedes responder en minutos o kilómetros).");
   currentIndex = -2; // Estado para pedir tiempo
 }
 
