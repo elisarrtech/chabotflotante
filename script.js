@@ -120,7 +120,6 @@ async function submitAnswers() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(answers)
     });
-
     const dataBackend = await resBackend.json();
     addMessage(dataBackend.message || 'Respuestas enviadas al sistema.', 'bot');
   } catch {
@@ -134,7 +133,6 @@ async function submitAnswers() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(answers)
     });
-
     const dataSheets = await resSheets.json();
     addMessage(dataSheets.message || '✔️ Respuestas guardadas en Sheets.', 'bot');
   } catch {
@@ -198,22 +196,3 @@ input.addEventListener('keydown', (e) => {
     sendBtn.click();
   }
 });
-
-
-async function submitAnswers() {
-  try {
-    // URL de tu webhook de Google Apps Script:
-    const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec'; // <-- REEMPLAZA ESTO
-
-    const res = await fetch(googleSheetsWebhook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers)
-    });
-
-    const data = await res.json();
-    addMessage(data.message || 'Respuestas guardadas con éxito.', 'bot');
-  } catch (error) {
-    addMessage('Error enviando respuestas a Sheets. Intenta más tarde.', 'bot');
-  }
-}
