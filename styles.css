@@ -1,0 +1,103 @@
+/* Botón flotante */
+#chatbotButton {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #28a745; /* verde Matchstaff */
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+/* Ventana de chat */
+#chatbotWindow {
+  position: fixed;
+  bottom: 95px;
+  right: 25px;
+  width: 360px;
+  max-height: 520px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+}
+
+/* Header */
+#chatbotHeader {
+  background-color: #28a745; /* verde Matchstaff */
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 18px;
+  user-select: none;
+}
+
+/* Área mensajes */
+#chatbotMessages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f9f9f9;
+}
+
+/* Input y botón enviar */
+#chatbotInputArea {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+}
+
+#chatbotInput {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+#chatbotSendBtn {
+  margin-left: 10px;
+  background-color: #28a745; /* verde Matchstaff */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Mensajes */
+.message {
+  margin: 8px 0;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  clear: both;
+  word-wrap: break-word;
+}
+
+.message.bot {
+  background-color: #e1e1e1;
+  float: left;
+  border-bottom-left-radius: 0;
+}
+
+.message.user {
+  background-color: #28a745; /* verde Matchstaff */
+  color: white;
+  float: right;
+  border-bottom-right-radius: 0;
+}
