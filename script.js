@@ -109,14 +109,14 @@ function showVacancies() {
   currentIndex++;
 }
 
-async function sendToGoogleSheets(data) {
-  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec'; // tu URL real
+async function sendToGoogleSheets(valuesArray) {
+  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec';
 
   try {
     const response = await fetch(googleSheetsWebhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify({ data: valuesArray })
     });
 
     const result = await response.json();
@@ -127,7 +127,19 @@ async function sendToGoogleSheets(data) {
 }
 
 async function submitAnswers() {
-  await sendToGoogleSheets(answers);
+  const orderedData = [
+    answers["tiempo_kelloggs"] || "",
+    answers["nombre"] || ""
+  ];
+
+  const dynamicIds = questions.map(q => q.id);
+  dynamicIds.forEach(id => {
+    orderedData.push(answers[id] || "");
+  });
+
+  orderedData.push(answers["vacante_interes"] || "");
+
+  await sendToGoogleSheets(orderedData);
 }
 
 function endChat() {
@@ -154,7 +166,6 @@ sendBtn.addEventListener('click', async () => {
     return;
   }
 
-  // Respuesta final de vacantes
   if (currentIndex > questions.length) {
     addMessage(text, "user");
 
@@ -182,7 +193,6 @@ sendBtn.addEventListener('click', async () => {
     return;
   }
 
-  // Flujo normal de preguntas
   await sendAnswer(text);
   input.value = '';
 });
@@ -193,3 +203,4 @@ input.addEventListener('keydown', (e) => {
     sendBtn.click();
   }
 });
+
