@@ -110,7 +110,7 @@ function showVacancies() {
 }
 
 async function sendToGoogleSheets(data) {
-  const googleSheetsWebhook = 'https://script.google.com/macros/s/ABC1234567890/exec'; // Pega aquí tu URL real
+  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec'; // Pega aquí tu URL real
 
   try {
     const response = await fetch(googleSheetsWebhook, {
