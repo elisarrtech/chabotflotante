@@ -3,7 +3,7 @@
   position: fixed;
   bottom: 25px;
   right: 25px;
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   color: white;
   border-radius: 50%;
   width: 60px;
@@ -25,7 +25,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  display: none;
+  display: none; /* Oculto al inicio */
   flex-direction: column;
   overflow: hidden;
   font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
 
 /* Header */
 #chatbotHeader {
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   color: white;
   padding: 12px 16px;
   font-weight: bold;
@@ -69,7 +69,7 @@
 
 #chatbotSendBtn {
   margin-left: 10px;
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   border: none;
   color: white;
   padding: 8px 16px;
@@ -96,7 +96,7 @@
 }
 
 .message.user {
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   color: white;
   float: right;
   border-bottom-right-radius: 0;
