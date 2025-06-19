@@ -113,7 +113,7 @@ async function sendAnswer(answer) {
       addMessage("📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.", "bot");
       addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Paletizador<br>2️⃣ Ayudante general<br>3️⃣ Ambas vacantes<br>4️⃣ Solo quiero más información", "bot");
 
-      currentIndex++;
+      currentIndex = questions.length;  // Aquí se fija para esperar respuesta de selección
     }
   }
 }
@@ -122,9 +122,11 @@ sendBtn.addEventListener('click', async () => {
   const text = input.value.trim();
   if (!text) return;
 
-  if (currentIndex === questions.length) {
+  console.log('currentIndex:', currentIndex, 'Input:', text);  // Para depurar
+
+  if (currentIndex >= questions.length) {
     addMessage(text, "user");
-    if (["1","2","3","4"].includes(text)) {
+    if (["1", "2", "3", "4"].includes(text)) {
       let respuesta = "";
       switch(text) {
         case "1": respuesta = "¡Genial! Te interesa la vacante de Paletizador."; break;
