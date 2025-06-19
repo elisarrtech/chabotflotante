@@ -10,7 +10,7 @@ Este es un chatbot interactivo para **Matchstaff**, diseñado para agilizar la a
 
 ## 📸 Vista previa
 
-![Vista previa del chatbot](https://user-images.githubusercontent.com/your_username/your_screenshot.png) <!-- Reemplaza con tu URL real o sube la imagen al repositorio -->
+![Vista previa del chatbot](https://elisarrtech.github.io/chatbot_matchstaff/)) <!-- Reemplaza con tu URL real o sube la imagen al repositorio -->
 
 ---
 
