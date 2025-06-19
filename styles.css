@@ -21,6 +21,7 @@
   bottom: 95px;
   right: 25px;
   width: 360px;
+  max-width: 95vw;
   max-height: 520px;
   background: white;
   border-radius: 8px;
@@ -34,7 +35,7 @@
 
 /* Header */
 #chatbotHeader {
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   color: white;
   padding: 12px 16px;
   font-weight: bold;
@@ -69,7 +70,7 @@
 
 #chatbotSendBtn {
   margin-left: 10px;
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   border: none;
   color: white;
   padding: 8px 16px;
@@ -96,8 +97,48 @@
 }
 
 .message.user {
-  background-color: #28a745; /* verde Matchstaff */
+  background-color: #28a745;
   color: white;
   float: right;
   border-bottom-right-radius: 0;
+}
+
+/* --- Diseño responsivo para móviles --- */
+@media (max-width: 480px) {
+  #chatbotWindow {
+    width: 95vw;
+    height: 80vh;
+    bottom: 80px;
+    right: 10px;
+    max-height: none;
+    border-radius: 12px;
+  }
+
+  #chatbotButton {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    bottom: 15px;
+    right: 15px;
+  }
+
+  #chatbotHeader {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  #chatbotInput {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  #chatbotSendBtn {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .message {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
 }
