@@ -109,22 +109,26 @@ function showVacancies() {
   currentIndex++;
 }
 
-async function submitAnswers() {
-  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec;
-  const backendUrl = `${apiUrl}/submit_answers`;
+async function sendToGoogleSheets(data) {
+  const googleSheetsWebhook = 'https://script.google.com/macros/s/ABC1234567890/exec'; // Pega aquí tu URL real
 
   try {
-    // Enviar al backend
-    const resBackend = await fetch(backendUrl, {
+    const response = await fetch(googleSheetsWebhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers)
+      body: JSON.stringify(data)
     });
-    const dataBackend = await resBackend.json();
-    addMessage(dataBackend.message || 'Respuestas enviadas al sistema.', 'bot');
-  } catch {
-    addMessage('❌ Error al enviar respuestas al servidor. Intenta más tarde.', 'bot');
+
+    const result = await response.json();
+    console.log('Google Sheets response:', result.message);
+    // Aquí puedes mostrar mensaje en tu chatbot:
+    addMessage(result.message || 'Respuestas guardadas en Google Sheets.', 'bot');
+  } catch (error) {
+    console.error('Error enviando a Google Sheets:', error);
+    addMessage('Error enviando respuestas a Google Sheets. Intenta más tarde.', 'bot');
   }
+}
+
 
   try {
     // Enviar a Google Sheets
