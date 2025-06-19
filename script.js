@@ -110,7 +110,7 @@ function showVacancies() {
 }
 
 async function sendToGoogleSheets(data) {
-  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec'; // Pega aquí tu URL real
+  const googleSheetsWebhook = 'https://script.google.com/macros/s/AKfycbxo4FZDa9jGdOW01OwYkLDKIRWeDbZcqq9ZcMzyRDPauuYwn-jfr4r7Ydf4TbRRQR8ugQ/exec'; // tu URL real
 
   try {
     const response = await fetch(googleSheetsWebhook, {
@@ -120,12 +120,14 @@ async function sendToGoogleSheets(data) {
     });
 
     const result = await response.json();
-    console.log('Google Sheets response:', result.message);
     addMessage(result.message || 'Respuestas guardadas en Google Sheets.', 'bot');
   } catch (error) {
-    console.error('Error enviando a Google Sheets:', error);
     addMessage('Error enviando respuestas a Google Sheets. Intenta más tarde.', 'bot');
   }
+}
+
+async function submitAnswers() {
+  await sendToGoogleSheets(answers);
 }
 
 function endChat() {
@@ -142,6 +144,9 @@ sendBtn.addEventListener('click', async () => {
   if (chatEnded) {
     if (text.toLowerCase() === 'reiniciar') {
       startChat();
+    } else if (text.toLowerCase() === 'finalizar') {
+      addMessage("👍 Gracias por usar el chatbot. Hasta luego.", "bot");
+      chatWindow.style.display = 'none';
     } else {
       addMessage("El chat ha finalizado. Escribe <b>reiniciar</b> para empezar de nuevo.", "bot");
     }
@@ -163,7 +168,9 @@ sendBtn.addEventListener('click', async () => {
       addMessage(respuesta, "bot");
       addMessage("🎉 Gracias por tu interés. Te contactaremos pronto.", "bot");
 
-      await sendToGoogleSheets(answers); // Aquí llamo para enviar respuestas a Sheets
+      answers["vacante_interes"] = respuesta;
+
+      await submitAnswers();
 
       addMessage("Escribe <b>reiniciar</b> si deseas volver a empezar o <b>finalizar</b> para cerrar el chat.", "bot");
       endChat();
@@ -186,4 +193,3 @@ input.addEventListener('keydown', (e) => {
     sendBtn.click();
   }
 });
-
