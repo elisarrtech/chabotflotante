@@ -1,73 +1,3 @@
-const apiUrl = "https://chatboterr-3cbv.onrender.com";
-
-const btn = document.getElementById('chatbotButton');
-const chatWindow = document.getElementById('chatbotWindow');
-const messagesContainer = document.getElementById('chatbotMessages');
-const input = document.getElementById('chatbotInput');
-const sendBtn = document.getElementById('chatbotSendBtn');
-
-let questions = [];
-let currentIndex = -3;  // Estados: -3: inicio, -2: preguntar tiempo, -1: preguntar nombre, 0+: preguntas API
-const answers = {};
-
-btn.addEventListener('click', () => {
-  if (chatWindow.style.display === 'flex') {
-    chatWindow.style.display = 'none';
-  } else {
-    chatWindow.style.display = 'flex';
-    input.focus();
-    if (messagesContainer.innerHTML === '') {
-      startChat();
-    }
-  }
-});
-
-function addMessage(text, sender = 'bot') {
-  const msg = document.createElement('div');
-  msg.classList.add('message', sender);
-  if(sender === 'bot'){
-    let formatted = text
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-    msg.innerHTML = formatted;
-  } else {
-    msg.textContent = text;
-  }
-  messagesContainer.appendChild(msg);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-async function loadQuestions() {
-  try {
-    const res = await fetch(`${apiUrl}/get_questions`);
-    if (!res.ok) throw new Error('Error al cargar preguntas');
-    questions = await res.json();
-    // Removemos preguntas que ya manejamos aparte:
-    questions = questions.filter(q => q.id !== "tiempo_kelloggs" && q.id !== "nombre");
-  } catch (e) {
-    addMessage('No se pudieron cargar las preguntas. Intenta más tarde.', 'bot');
-  }
-}
-
-function parseTime(answer) {
-  let lower = answer.toLowerCase();
-  let num = answer.match(/\d+/);
-  if (!num) return null;
-  num = parseInt(num[0]);
-  if (lower.includes('km')) {
-    num = num * 2;  // Ejemplo de conversión km->minutos
-  }
-  return num;
-}
-
-async function startChat() {
-  addMessage("¡Hola! 👋 Gracias por tu interés en una vacante con MatchStaff.");
-  addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
-  addMessage("📌 *Nota:* Las vacantes disponibles actualmente son para trabajar cerca de la empresa Kellogg’s. Por el momento no contamos con transporte, por lo que es importante saber qué tan lejos te encuentras del lugar para evaluar si es viable para ti.");
-  addMessage("5️⃣ ¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s? (Puedes responder en minutos o kilómetros).");
-  currentIndex = -2; // Estado para pedir tiempo
-}
-
 async function sendAnswer(answer) {
   if (currentIndex === -2) {
     // Validamos tiempo primero
@@ -104,7 +34,16 @@ async function sendAnswer(answer) {
     }
 
   } else if (currentIndex >= 0 && currentIndex < questions.length) {
-    // Respondemos preguntas dinámicas
+    // Validar correo si la pregunta actual es 'correo'
+    if (questions[currentIndex].id === "correo") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(answer.trim())) {
+        addMessage("Por favor, escribe un correo electrónico válido.", "bot");
+        return; // No avanzar si no es válido
+      }
+    }
+
+    // Guardar respuesta y avanzar normalmente
     answers[questions[currentIndex].id] = answer;
     addMessage(answer, "user");
     currentIndex++;
@@ -120,6 +59,7 @@ async function sendAnswer(answer) {
 
       currentIndex = questions.length; // Estado para selección de vacantes
     }
+
   } else if (currentIndex === questions.length) {
     // Respuesta a selección de vacantes
     addMessage(answer, "user");
@@ -143,40 +83,5 @@ async function sendAnswer(answer) {
     } else {
       addMessage("Por favor responde con un número entre 1 y 4.", "bot");
     }
-  }
-}
-
-sendBtn.addEventListener('click', async () => {
-  const text = input.value.trim();
-  if (!text) return;
-
-  if (input.disabled) {
-    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
-    input.value = "";
-    return;
-  }
-
-  await sendAnswer(text);
-  input.value = "";
-});
-
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
-    e.preventDefault();
-    sendBtn.click();
-  }
-});
-
-async function submitAnswers() {
-  try {
-    const res = await fetch(`${apiUrl}/guardar-en-sheets`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: Object.values(answers) })
-    });
-    const data = await res.json();
-    addMessage(data.message || 'Respuestas guardadas en Google Sheets.', 'bot');
-  } catch {
-    addMessage('Error enviando respuestas a Google Sheets. Intenta más tarde.', 'bot');
   }
 }
