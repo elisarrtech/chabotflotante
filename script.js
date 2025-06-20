@@ -5,7 +5,13 @@ const chatWindow = document.getElementById('chatbotWindow');
 const messagesContainer = document.getElementById('chatbotMessages');
 const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
-const closeBtn = document.getElementById('chatbotClose'); // 👈 NUEVA LÍNEA
+
+const closeBtn = document.getElementById('chatbotClose');
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
+}
 
 let questions = [];
 let currentIndex = -3;
@@ -17,11 +23,6 @@ btn.addEventListener('click', () => {
   if (messagesContainer.innerHTML === '') {
     startChat();
   }
-});
-
-// 👇 NUEVO EVENTO PARA CERRAR EL CHAT
-closeBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'none';
 });
 
 function addMessage(text, sender = 'bot') {
@@ -279,12 +280,3 @@ window.addEventListener('load', () => {
     startChat();
   }
 });
-
-// Permitir cerrar el chatbot con el botón ✖
-const closeBtn = document.getElementById('chatbotClose');
-if (closeBtn) {
-  closeBtn.addEventListener('click', () => {
-    chatWindow.style.display = 'none';
-  });
-}
-
