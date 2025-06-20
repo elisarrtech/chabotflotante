@@ -1,6 +1,13 @@
 /* Importar Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+img.chatbot-icon {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+
 /* Botón flotante */
 #chatbotButton {
   position: fixed;
