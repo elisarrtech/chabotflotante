@@ -15,7 +15,7 @@
 </button>
 
 <!-- VENTANA DEL CHAT -->
-<div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader">
+<div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader" style="display:none;">
   <div id="chatbotHeader" style="display:flex; align-items:center; gap:10px;">
     <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
     <span>Chatbot MatchStaff</span>
@@ -35,23 +35,6 @@
 
 <!-- Script principal -->
 <script src="script.js"></script>
-
-  <!-- Botón flotante para abrir chatbot -->
-<button id="chatbotButton" aria-label="Abrir chat">💬</button>
-
-<!-- Ventana del chatbot -->
-<div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader" style="display:none;">
-  <div id="chatbotHeader">
-    <span>Chatbot MatchStaff</span>
-    <button id="chatbotClose" aria-label="Cerrar">✖</button>
-  </div>
-  <div id="chatbotMessages" aria-live="polite" aria-atomic="true"></div>
-  <div id="chatbotInputArea">
-    <input id="chatbotInput" type="text" placeholder="Escribe tu respuesta..." autocomplete="off" />
-    <button id="chatbotSendBtn" aria-label="Enviar mensaje">Enviar</button>
-  </div>
-</div>
-
 
 </body>
 </html>
