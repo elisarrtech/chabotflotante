@@ -29,7 +29,7 @@
   position: fixed;
   bottom: 95px;
   right: 25px;
-  width: 360px;
+  width: 400px; /* aumentado de 360 para más espacio */
   max-height: 520px;
   background: white;
   border-radius: 8px;
@@ -72,17 +72,20 @@
   scroll-behavior: smooth;
 }
 
-/* Input y botón enviar */
+/* Input y botones */
 #chatbotInputArea {
   display: flex;
+  gap: 8px; /* espacio entre input y botones */
   padding: 10px;
   border-top: 1px solid #ccc;
   background: #fff;
   font-family: 'Roboto', sans-serif;
+  flex-wrap: nowrap;
 }
 
 #chatbotInput {
-  flex: 1;
+  flex-grow: 1;
+  min-width: 0; /* para evitar overflow */
   padding: 8px 12px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -91,22 +94,38 @@
   font-family: 'Roboto', sans-serif;
 }
 
-#chatbotSendBtn {
-  margin-left: 10px;
-  background-color: #61CE70;
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  font-weight: bold;
+#chatbotSendBtn,
+#chatbotRestartBtn {
+  flex-shrink: 0; /* que no se reduzcan al mínimo */
+  padding: 8px 12px;
   font-size: 14px;
   border-radius: 4px;
   cursor: pointer;
+  border: none;
   font-family: 'Roboto', sans-serif;
+  font-weight: bold;
   transition: background-color 0.2s;
+}
+
+/* Botón enviar */
+#chatbotSendBtn {
+  background-color: #61CE70;
+  color: white;
 }
 
 #chatbotSendBtn:hover {
   background-color: #50b25d;
+}
+
+/* Botón reiniciar */
+#chatbotRestartBtn {
+  background-color: #ccc;
+  color: black;
+}
+
+#chatbotRestartBtn:hover {
+  background-color: #999;
+  color: white;
 }
 
 /* Mensajes */
@@ -157,25 +176,6 @@
   33% { content: '.'; }
   66% { content: '..'; }
   100% { content: '...'; }
-}
-
-/* Botón de reinicio (oculto por defecto) */
-.restartBtn {
-  background: none;
-  border: 1px solid #61CE70;
-  color: #61CE70;
-  padding: 6px 10px;
-  font-size: 13px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 10px auto 0;
-  display: block;
-  font-family: 'Roboto', sans-serif;
-}
-
-.restartBtn:hover {
-  background-color: #61CE70;
-  color: white;
 }
 
 /* --------------------- */
