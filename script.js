@@ -7,7 +7,6 @@ const sendBtn = document.getElementById('chatbotSendBtn');
 const restartBtn = document.getElementById('chatbotRestartBtn');
 const closeBtn = document.getElementById('chatbotClose');
 
-
 // Crear botón flotante para reabrir el chat
 const openChatBtn = document.createElement('button');
 openChatBtn.id = 'chatbotOpenBtn';
@@ -34,8 +33,6 @@ document.body.appendChild(openChatBtn);
 openChatBtn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
   openChatBtn.style.display = 'none';
-
-
 
   input.focus();
 });
