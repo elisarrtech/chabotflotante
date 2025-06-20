@@ -12,12 +12,7 @@ let questions = [];
 let currentIndex = -3;
 const answers = {};
 
-if (closeBtn) {
-  closeBtn.addEventListener('click', () => {
-    chatWindow.style.display = 'none';
-  });
-}
-
+// Mostrar/ocultar ventana chat
 btn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
   input.focus();
@@ -26,12 +21,16 @@ btn.addEventListener('click', () => {
   }
 });
 
-if (restartBtn) {
-  restartBtn.addEventListener('click', () => {
-    resetChat();
-  });
-}
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+});
 
+// Reiniciar chat
+restartBtn.addEventListener('click', () => {
+  resetChat();
+});
+
+// Añadir mensaje al chat
 function addMessage(text, sender = 'bot') {
   const msg = document.createElement('div');
   msg.classList.add('message', sender);
@@ -47,6 +46,7 @@ function addMessage(text, sender = 'bot') {
   messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
+// Carga preguntas desde API
 async function loadQuestions() {
   try {
     const res = await fetch(`${apiUrl}/get_questions`);
@@ -58,6 +58,7 @@ async function loadQuestions() {
   }
 }
 
+// Extrae tiempo en minutos desde respuesta
 function parseTime(answer) {
   let lower = answer.toLowerCase();
   let num = answer.match(/\d+/);
@@ -69,6 +70,7 @@ function parseTime(answer) {
   return num;
 }
 
+// Inicio del chat con preguntas iniciales
 async function startChat() {
   addMessage("¡Hola! 👋 Gracias por tu interés en una vacante con MatchStaff.");
   addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
@@ -77,6 +79,7 @@ async function startChat() {
   currentIndex = -2;
 }
 
+// Enviar respuesta del usuario y procesar flujo
 async function sendAnswer(answer) {
   if (currentIndex === -2) {
     addMessage(answer, "user");
@@ -143,6 +146,7 @@ async function sendAnswer(answer) {
     if (currentIndex < questions.length) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
+      // Mensajes finales con opciones laborales
       addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
 
       addMessage(
@@ -246,27 +250,7 @@ async function sendAnswer(answer) {
   }
 }
 
-sendBtn.addEventListener('click', async () => {
-  const text = input.value.trim();
-  if (!text) return;
-
-  if (input.disabled) {
-    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
-    input.value = "";
-    return;
-  }
-
-  await sendAnswer(text);
-  input.value = "";
-});
-
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
-    e.preventDefault();
-    sendBtn.click();
-  }
-});
-
+// Enviar respuestas al backend
 async function submitAnswers() {
   try {
     const res = await fetch(`${apiUrl}/guardar-en-sheets`, {
@@ -281,6 +265,7 @@ async function submitAnswers() {
   }
 }
 
+// Resetear chat para nueva sesión
 function resetChat() {
   messagesContainer.innerHTML = '';
   input.disabled = false;
@@ -292,25 +277,35 @@ function resetChat() {
   startChat();
 }
 
+// Inicializa chat al cargar página (si ventana está visible)
 window.addEventListener('load', () => {
-  chatWindow.style.display = 'flex';
-  input.focus();
-  if (messagesContainer.innerHTML === '') {
-    startChat();
+  if (chatWindow.style.display === 'flex') {
+    input.focus();
+    if (messagesContainer.innerHTML === '') {
+      startChat();
+    }
   }
 });
 
-
-const btn = document.getElementById('chatbotButton');
-const chatWindow = document.getElementById('chatbotWindow');
-const closeBtn = document.getElementById('chatbotClose');
-
-btn.addEventListener('click', () => {
-  chatWindow.style.display = 'flex';
-  document.getElementById('chatbotInput').focus();
-  // Aquí llamas a startChat() o la función para iniciar el chat
+// Enviar mensaje con Enter
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
+    e.preventDefault();
+    sendBtn.click();
+  }
 });
 
-closeBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'none';
+// Enviar mensaje con click botón
+sendBtn.addEventListener('click', async () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (input.disabled) {
+    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
+    input.value = "";
+    return;
+  }
+
+  await sendAnswer(text);
+  input.value = "";
 });
