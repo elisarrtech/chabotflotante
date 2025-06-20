@@ -134,7 +134,7 @@ async function sendAnswer(answer) {
 
     if (["1", "2", "3", "4"].includes(answer)) {
       const respuestasVacante = {
-        "1": "¡Genial! Te interesa la vacante de Paletizador.",
+        "1": "¡Genial! Te interesa la vacante de Sorteador.",
         "2": "Perfecto, estás interesado en Ayudante General.",
         "3": "Excelente, te interesa la vacante de Operador de Máquinas.",
         "4": "Claro, te enviaremos más información pronto."
