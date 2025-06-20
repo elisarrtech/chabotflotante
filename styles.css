@@ -1,29 +1,6 @@
 /* Importar Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-/* Botón flotante */
-#chatbotButton {
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-  background-color: #61CE70; /* verde Matchstaff actualizado */
-  color: white;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 30px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  z-index: 1000;
-  font-family: 'Roboto', sans-serif;
-  transition: transform 0.3s ease;
-}
-
-#chatbotButton:hover {
-  transform: scale(1.05);
-}
-
 /* Ventana de chat */
 #chatbotWindow {
   position: fixed;
@@ -34,7 +11,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  display: flex; /* siempre visible */
+  display: flex;
   flex-direction: column;
   overflow: hidden;
   font-family: 'Roboto', sans-serif;
@@ -56,10 +33,10 @@
   font-weight: bold;
   font-size: 18px;
   user-select: none;
-  font-family: 'Roboto', sans-serif;
   display: flex;
   align-items: center;
   gap: 10px;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Área mensajes */
@@ -68,14 +45,14 @@
   padding: 10px;
   overflow-y: auto;
   background: #f9f9f9;
-  font-family: 'Roboto', sans-serif;
   scroll-behavior: smooth;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Input y botones */
 #chatbotInputArea {
   display: flex;
-  gap: 8px; /* espacio entre input y botones */
+  gap: 8px;
   padding: 10px;
   border-top: 1px solid #ccc;
   background: #fff;
@@ -85,7 +62,7 @@
 
 #chatbotInput {
   flex-grow: 1;
-  min-width: 0; /* para evitar overflow */
+  min-width: 0;
   padding: 8px 12px;
   font-size: 14px;
   border: 1px solid #ccc;
@@ -96,7 +73,7 @@
 
 #chatbotSendBtn,
 #chatbotRestartBtn {
-  flex-shrink: 0; /* que no se reduzcan al mínimo */
+  flex-shrink: 0;
   padding: 8px 12px;
   font-size: 14px;
   border-radius: 4px;
@@ -189,12 +166,4 @@
   }
 }
 
-  #chatbotButton {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    right: 5vw;
-    bottom: 20px;
-  }
-}
 
