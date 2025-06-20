@@ -34,7 +34,10 @@ document.body.appendChild(openChatBtn);
 openChatBtn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
   openChatBtn.style.display = 'none';
-  overlay.style.display = 'none'; // ya no se usa en este flujo
+
+  // Mostrar overlay solo si quieres sombra oscura detrás
+  overlay.style.display = 'block';
+
   input.focus();
 });
 
@@ -42,8 +45,11 @@ openChatBtn.addEventListener('click', () => {
 closeBtn.addEventListener('click', () => {
   chatWindow.style.display = 'none';
   openChatBtn.style.display = 'block';
-  overlay.style.display = 'none'; // 🔧 importante para quitar sombra/overlay
+
+  // Ocultar overlay para que no bloquee nada en la página
+  overlay.style.display = 'none';
 });
+
 
 let questions = [];
 let currentIndex = -3;
