@@ -6,6 +6,7 @@ const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 const restartBtn = document.getElementById('chatbotRestartBtn');
 const closeBtn = document.getElementById('chatbotClose');
+const chatOverlay = document.getElementById('chatOverlay');
 
 // Crear botón flotante para reabrir el chat cuando está cerrado
 const openChatBtn = document.createElement('button');
@@ -30,16 +31,22 @@ Object.assign(openChatBtn.style, {
 });
 document.body.appendChild(openChatBtn);
 
-openChatBtn.addEventListener('click', () => {
+function openChat() {
   chatWindow.style.display = 'flex';
+  chatOverlay.style.display = 'block';
   openChatBtn.style.display = 'none';
   input.focus();
-});
+}
 
-closeBtn.addEventListener('click', () => {
+function closeChat() {
   chatWindow.style.display = 'none';
+  chatOverlay.style.display = 'none';
   openChatBtn.style.display = 'block';
-});
+}
+
+openChatBtn.addEventListener('click', openChat);
+closeBtn.addEventListener('click', closeChat);
+chatOverlay.addEventListener('click', closeChat);
 
 let questions = [];
 let currentIndex = -3;
@@ -209,6 +216,7 @@ function resetChat() {
 
 window.addEventListener('load', () => {
   chatWindow.style.display = 'flex'; // Siempre visible al cargar
+  chatOverlay.style.display = 'block'; // Mostrar overlay al inicio
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
