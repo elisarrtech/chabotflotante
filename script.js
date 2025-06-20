@@ -1,56 +1,41 @@
 const apiUrl = "https://chatboterr-3cbv.onrender.com";
 
+const btn = document.getElementById('chatbotButton');
 const chatWindow = document.getElementById('chatbotWindow');
 const messagesContainer = document.getElementById('chatbotMessages');
 const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
-const restartBtn = document.getElementById('chatbotRestartBtn');
 const closeBtn = document.getElementById('chatbotClose');
-
-// Crear botón flotante para reabrir el chat
-const openChatBtn = document.createElement('button');
-openChatBtn.id = 'chatbotOpenBtn';
-openChatBtn.innerHTML = '<img src="img/MATCH-STAFF-1.png" alt="Abrir Chat" style="width: 32px; height: 32px;" />';
-Object.assign(openChatBtn.style, {
-  position: 'fixed',
-  bottom: '25px',
-  right: '25px',
-  width: '60px',
-  height: '60px',
-  padding: '10px',
-  backgroundColor: '#61CE70',
-  borderRadius: '50%',
-  border: 'none',
-  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-  cursor: 'pointer',
-  zIndex: '1000',
-  display: 'none',
-});
-
-document.body.appendChild(openChatBtn);
-
-// Abrir el chat
-openChatBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'flex';
-  openChatBtn.style.display = 'none';
-
-  input.focus();
-});
-
-// Cerrar el chat
-closeBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'none';
-  openChatBtn.style.display = 'block';
-});
+const restartBtn = document.getElementById('chatbotRestartBtn');
 
 let questions = [];
 let currentIndex = -3;
 const answers = {};
 
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
+}
+
+btn.addEventListener('click', () => {
+  chatWindow.style.display = 'flex';
+  input.focus();
+  if (messagesContainer.innerHTML === '') {
+    startChat();
+  }
+});
+
+if (restartBtn) {
+  restartBtn.addEventListener('click', () => {
+    resetChat();
+  });
+}
+
 function addMessage(text, sender = 'bot') {
   const msg = document.createElement('div');
   msg.classList.add('message', sender);
-  if (sender === 'bot') {
+  if(sender === 'bot'){
     let formatted = text
       .replace(/\n/g, '<br>')
       .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
@@ -68,7 +53,7 @@ async function loadQuestions() {
     if (!res.ok) throw new Error('Error al cargar preguntas');
     questions = await res.json();
     questions = questions.filter(q => q.id !== "tiempo_kelloggs" && q.id !== "nombre");
-  } catch {
+  } catch (e) {
     addMessage('No se pudieron cargar las preguntas. Intenta más tarde.', 'bot');
   }
 }
@@ -78,7 +63,9 @@ function parseTime(answer) {
   let num = answer.match(/\d+/);
   if (!num) return null;
   num = parseInt(num[0]);
-  if (lower.includes('km')) num = num * 2;
+  if (lower.includes('km')) {
+    num = num * 2;
+  }
   return num;
 }
 
@@ -113,6 +100,7 @@ async function sendAnswer(answer) {
   } else if (currentIndex === -1) {
     answers["nombre"] = answer;
     addMessage(answer, "user");
+
     addMessage("Gracias. Ahora, por favor indícame tu número de teléfono (10 dígitos):", "bot");
     currentIndex = -0.5;
 
@@ -156,10 +144,83 @@ async function sendAnswer(answer) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
       addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
-      addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Sorteador@<br>2️⃣ Ayudante General<br>3️⃣ Operador de Máquinas<br>4️⃣ Solo quiero más información", "bot");
+
+      addMessage(
+        "🔶 <b>1. SORTEADOR@</b><br>" +
+        "💲 Sueldo semanal bruto: $2,550<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $229.50 semanal<br>" +
+        "🎁 Bono de asistencia mensual: $2,040<br>" +
+        "🛍 Vales de despensa: $1,020 mensual<br>" +
+        "📚 Escolaridad requerida: PREPARATORIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
+
+      addMessage(
+        "🔹 <b>2. AYUDANTE GENERAL</b><br>" +
+        "💲 Sueldo semanal bruto: $2,232<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $201 semanal<br>" +
+        "🛍 Vales de despensa: $892.59 mensual<br>" +
+        "📚 Escolaridad requerida: PRIMARIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "🎁 Bono de asistencia: $1,785<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
+
+      addMessage(
+        "🔸 <b>3. OPERADOR DE MÁQUINAS</b><br>" +
+        "💲 Sueldo semanal bruto: $2,933<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $264 semanal<br>" +
+        "🛍 Vales de despensa: $1,173 mensual<br>" +
+        "📚 Escolaridad requerida: PREPARATORIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "🎁 Bono de asistencia: $2,346<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
+
+      addMessage(
+        "📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.",
+        "bot"
+      );
+
+      addMessage(
+        "¿Te interesa alguna de estas vacantes? Por favor responde con:<br>" +
+        "1️⃣ Sorteador@<br>" +
+        "2️⃣ Ayudante General<br>" +
+        "3️⃣ Operador de Máquinas<br>" +
+        "4️⃣ Solo quiero más información",
+        "bot"
+      );
+
       currentIndex = questions.length;
     }
-
   } else if (currentIndex === questions.length) {
     addMessage(answer, "user");
 
@@ -174,6 +235,7 @@ async function sendAnswer(answer) {
       addMessage("Muchas gracias por tu interés. Te contactaremos pronto con más detalles.", "bot");
 
       answers["vacante_interes"] = respuestasVacante[answer];
+
       await submitAnswers();
 
       input.disabled = true;
@@ -183,6 +245,27 @@ async function sendAnswer(answer) {
     }
   }
 }
+
+sendBtn.addEventListener('click', async () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (input.disabled) {
+    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
+    input.value = "";
+    return;
+  }
+
+  await sendAnswer(text);
+  input.value = "";
+});
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
+    e.preventDefault();
+    sendBtn.click();
+  }
+});
 
 async function submitAnswers() {
   try {
@@ -211,36 +294,23 @@ function resetChat() {
 
 window.addEventListener('load', () => {
   chatWindow.style.display = 'flex';
-  openChatBtn.style.display = 'none';
-  // overlay.style.display = 'none';  <-- línea eliminada
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
   }
 });
 
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
-    e.preventDefault();
-    sendBtn.click();
-  }
+
+const btn = document.getElementById('chatbotButton');
+const chatWindow = document.getElementById('chatbotWindow');
+const closeBtn = document.getElementById('chatbotClose');
+
+btn.addEventListener('click', () => {
+  chatWindow.style.display = 'flex';
+  document.getElementById('chatbotInput').focus();
+  // Aquí llamas a startChat() o la función para iniciar el chat
 });
 
-sendBtn.addEventListener('click', async () => {
-  const text = input.value.trim();
-  if (!text) return;
-
-  if (input.disabled) {
-    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
-    input.value = "";
-    return;
-  }
-
-  await sendAnswer(text);
-  input.value = "";
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
 });
-
-restartBtn.addEventListener('click', () => {
-  resetChat();
-});
-
