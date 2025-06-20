@@ -11,24 +11,23 @@ const overlay = document.getElementById('chatOverlay');
 // Crear botón flotante para reabrir el chat
 const openChatBtn = document.createElement('button');
 openChatBtn.id = 'chatbotOpenBtn';
-openChatBtn.innerHTML = '💬';
+openChatBtn.innerHTML = '<img src="img/MATCH-STAFF-1.png" alt="Abrir Chat" style="width: 32px; height: 32px;" />';
 Object.assign(openChatBtn.style, {
   position: 'fixed',
   bottom: '25px',
   right: '25px',
   width: '60px',
   height: '60px',
-  fontSize: '30px',
-  borderRadius: '50%',
+  padding: '10px',
   backgroundColor: '#61CE70',
-  color: 'white',
+  borderRadius: '50%',
   border: 'none',
-  cursor: 'pointer',
   boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+  cursor: 'pointer',
   zIndex: '1000',
   display: 'none',
-  fontFamily: "'Roboto', sans-serif",
 });
+
 document.body.appendChild(openChatBtn);
 
 // Abrir el chat
