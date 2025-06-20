@@ -3,39 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Chatbot Matchstaff</title>
+  <title>Chatbot MatchStaff</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="img/MATCH-STAFF-1.png" type="image/png" />
+  <link rel="icon" href="img/MATCH-STAFF-1.png" />
 </head>
 <body>
-
-  <!-- Overlay de fondo oscuro -->
-  <div id="chatbotOverlay"></div>
-
-  <!-- Botón flotante con logo -->
+  <!-- Botón flotante -->
   <button id="chatbotButton" aria-label="Abrir chat">
-    <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
+    <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" />
   </button>
 
   <!-- Ventana del chat -->
-  <div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader">
+  <div id="chatbotWindow" aria-hidden="true">
     <div id="chatbotHeader">
-      <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
+      <img src="img/MATCH-STAFF-1.png" alt="Logo" />
       <span>Chatbot MatchStaff</span>
-      <button id="chatbotClose" aria-label="Cerrar">✖</button>
+      <button id="chatbotClose" aria-label="Cerrar chat">✖</button>
     </div>
-
-    <div id="chatbotMessages" aria-live="polite" aria-atomic="true"></div>
-
+    <div id="chatbotMessages" aria-live="polite"></div>
     <div id="chatbotInputArea">
-      <input id="chatbotInput" type="text" placeholder="Escribe tu respuesta..." aria-label="Entrada de texto" autocomplete="off" />
-      <button id="chatbotSendBtn" aria-label="Enviar mensaje">Enviar</button>
-      <button id="chatbotRestartBtn" aria-label="Reiniciar chat">Reiniciar</button>
+      <input id="chatbotInput" placeholder="Escribe tu respuesta..." />
+      <button id="chatbotSendBtn">Enviar</button>
+      <button id="chatbotRestartBtn">Reiniciar</button>
     </div>
   </div>
 
-  <!-- Script principal -->
   <script src="script.js"></script>
-
 </body>
 </html>
