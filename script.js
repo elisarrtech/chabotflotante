@@ -5,6 +5,41 @@ const messagesContainer = document.getElementById('chatbotMessages');
 const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 const restartBtn = document.getElementById('chatbotRestartBtn');
+const closeBtn = document.getElementById('chatbotClose');
+
+// Crear botón flotante para reabrir el chat cuando está cerrado
+const openChatBtn = document.createElement('button');
+openChatBtn.id = 'chatbotOpenBtn';
+openChatBtn.innerHTML = '💬';
+Object.assign(openChatBtn.style, {
+  position: 'fixed',
+  bottom: '25px',
+  right: '25px',
+  width: '60px',
+  height: '60px',
+  fontSize: '30px',
+  borderRadius: '50%',
+  backgroundColor: '#61CE70',
+  color: 'white',
+  border: 'none',
+  cursor: 'pointer',
+  boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+  zIndex: '1000',
+  display: 'none', // oculto al inicio
+  fontFamily: "'Roboto', sans-serif",
+});
+document.body.appendChild(openChatBtn);
+
+openChatBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'flex';
+  openChatBtn.style.display = 'none';
+  input.focus();
+});
+
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+  openChatBtn.style.display = 'block';
+});
 
 let questions = [];
 let currentIndex = -3;
@@ -173,7 +208,7 @@ function resetChat() {
 }
 
 window.addEventListener('load', () => {
-  chatWindow.style.display = 'flex'; // Siempre visible
+  chatWindow.style.display = 'flex'; // Siempre visible al cargar
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
