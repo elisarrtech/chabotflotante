@@ -7,7 +7,7 @@ const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 
 let questions = [];
-let currentIndex = -3;  // Estados: -3: inicio, -2: preguntar tiempo, -1: preguntar nombre, 0+: preguntas API
+let currentIndex = -3;
 const answers = {};
 
 btn.addEventListener('click', () => {
@@ -42,7 +42,6 @@ async function loadQuestions() {
     const res = await fetch(`${apiUrl}/get_questions`);
     if (!res.ok) throw new Error('Error al cargar preguntas');
     questions = await res.json();
-    // Removemos preguntas que ya manejamos aparte:
     questions = questions.filter(q => q.id !== "tiempo_kelloggs" && q.id !== "nombre");
   } catch (e) {
     addMessage('No se pudieron cargar las preguntas. Intenta más tarde.', 'bot');
@@ -55,7 +54,7 @@ function parseTime(answer) {
   if (!num) return null;
   num = parseInt(num[0]);
   if (lower.includes('km')) {
-    num = num * 2;  // Ejemplo de conversión km->minutos
+    num = num * 2;
   }
   return num;
 }
@@ -65,7 +64,7 @@ async function startChat() {
   addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
   addMessage("📌 *Nota:* Las vacantes disponibles actualmente son para trabajar cerca de la empresa Kellogg’s Querétaro. Por el momento no contamos con transporte, por lo que es importante saber qué tan lejos te encuentras del lugar para evaluar si es viable para ti.");
   addMessage("¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s ubicada en el Campo Militar? (Responder en minutos).");
-  currentIndex = -2; // Estado para pedir tiempo
+  currentIndex = -2;
 }
 
 async function sendAnswer(answer) {
@@ -92,11 +91,24 @@ async function sendAnswer(answer) {
     answers["nombre"] = answer;
     addMessage(answer, "user");
 
+    addMessage("Gracias. Ahora, por favor indícame tu número de teléfono (10 dígitos):", "bot");
+    currentIndex = -0.5;
+
+  } else if (currentIndex === -0.5) {
+    const telefono = answer.trim();
+    if (!/^\d{10}$/.test(telefono)) {
+      addMessage("El número debe tener exactamente 10 dígitos. Inténtalo de nuevo, por favor.", "bot");
+      return;
+    }
+
+    answers["telefono"] = telefono;
+    addMessage(telefono, "user");
+
     await loadQuestions();
 
     if (questions.length > 0) {
       currentIndex = 0;
-      addMessage(`Mucho gusto, ${answers["nombre"]}! Ahora, ${questions[currentIndex].pregunta}`, "bot");
+      addMessage(`Gracias ${answers["nombre"]}. Ahora, ${questions[currentIndex].pregunta}`, "bot");
     } else {
       addMessage("No hay preguntas para mostrar.", "bot");
     }
@@ -104,7 +116,6 @@ async function sendAnswer(answer) {
   } else if (currentIndex >= 0 && currentIndex < questions.length) {
     const questionId = questions[currentIndex].id;
 
-    // Validación de edad
     if (questionId === "edad") {
       const edad = parseInt(answer);
       if (isNaN(edad) || edad < 18 || edad > 55) {
@@ -120,81 +131,81 @@ async function sendAnswer(answer) {
     if (currentIndex < questions.length) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
-     addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
+      addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
 
-addMessage(
-  "🔶 <b>1. SORTEADOR@</b><br>" +
-  "💲 Sueldo semanal bruto: $2,550<br>" +
-  "📆 Semana desfasada<br>" +
-  "💼 75% prima vacacional<br>" +
-  "🎄 30 días de aguinaldo<br>" +
-  "💰 Fondo de ahorro: $229.50 semanal<br>" +
-  "🎁 Bono de asistencia mensual: $2,040<br>" +
-  "🛍 Vales de despensa: $1,020 mensual<br>" +
-  "📚 Escolaridad requerida: PREPARATORIA<br>" +
-  "🍽 Comedor 100% pagado<br>" +
-  "➕ Tiempo extra<br>" +
-  "⏰ Turnos 4x3 (12 horas)<br>" +
-  "💊 Doping obligatorio<br>" +
-  "💳 Pago con tarjeta Santander<br>" +
-  "🛡 Seguro de vida<br>" +
-  "📍 Empresa ubicada cerca del Campo Militar",
-  "bot"
-);
+      addMessage(
+        "🔶 <b>1. SORTEADOR@</b><br>" +
+        "💲 Sueldo semanal bruto: $2,550<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $229.50 semanal<br>" +
+        "🎁 Bono de asistencia mensual: $2,040<br>" +
+        "🛍 Vales de despensa: $1,020 mensual<br>" +
+        "📚 Escolaridad requerida: PREPARATORIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
 
-addMessage(
-  "🔹 <b>2. AYUDANTE GENERAL</b><br>" +
-  "💲 Sueldo semanal bruto: $2,232<br>" +
-  "📆 Semana desfasada<br>" +
-  "💼 75% prima vacacional<br>" +
-  "🎄 30 días de aguinaldo<br>" +
-  "💰 Fondo de ahorro: $201 semanal<br>" +
-  "🛍 Vales de despensa: $892.59 mensual<br>" +
-  "📚 Escolaridad requerida: PRIMARIA<br>" +
-  "🍽 Comedor 100% pagado<br>" +
-  "➕ Tiempo extra<br>" +
-  "⏰ Turnos 4x3 (12 horas)<br>" +
-  "💊 Doping obligatorio<br>" +
-  "🎁 Bono de asistencia: $1,785<br>" +
-  "💳 Pago con tarjeta Santander<br>" +
-  "🛡 Seguro de vida<br>" +
-  "📍 Empresa ubicada cerca del Campo Militar",
-  "bot"
-);
+      addMessage(
+        "🔹 <b>2. AYUDANTE GENERAL</b><br>" +
+        "💲 Sueldo semanal bruto: $2,232<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $201 semanal<br>" +
+        "🛍 Vales de despensa: $892.59 mensual<br>" +
+        "📚 Escolaridad requerida: PRIMARIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "🎁 Bono de asistencia: $1,785<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
 
-addMessage(
-  "🔸 <b>3. OPERADOR DE MÁQUINAS</b><br>" +
-  "💲 Sueldo semanal bruto: $2,933<br>" +
-  "📆 Semana desfasada<br>" +
-  "💼 75% prima vacacional<br>" +
-  "🎄 30 días de aguinaldo<br>" +
-  "💰 Fondo de ahorro: $264 semanal<br>" +
-  "🛍 Vales de despensa: $1,173 mensual<br>" +
-  "📚 Escolaridad requerida: PREPARATORIA<br>" +
-  "🍽 Comedor 100% pagado<br>" +
-  "➕ Tiempo extra<br>" +
-  "⏰ Turnos 4x3 (12 horas)<br>" +
-  "💊 Doping obligatorio<br>" +
-  "🎁 Bono de asistencia: $2,346<br>" +
-  "💳 Pago con tarjeta Santander<br>" +
-  "🛡 Seguro de vida<br>" +
-  "📍 Empresa ubicada cerca del Campo Militar",
-  "bot"
-);
+      addMessage(
+        "🔸 <b>3. OPERADOR DE MÁQUINAS</b><br>" +
+        "💲 Sueldo semanal bruto: $2,933<br>" +
+        "📆 Semana desfasada<br>" +
+        "💼 75% prima vacacional<br>" +
+        "🎄 30 días de aguinaldo<br>" +
+        "💰 Fondo de ahorro: $264 semanal<br>" +
+        "🛍 Vales de despensa: $1,173 mensual<br>" +
+        "📚 Escolaridad requerida: PREPARATORIA<br>" +
+        "🍽 Comedor 100% pagado<br>" +
+        "➕ Tiempo extra<br>" +
+        "⏰ Turnos 4x3 (12 horas)<br>" +
+        "💊 Doping obligatorio<br>" +
+        "🎁 Bono de asistencia: $2,346<br>" +
+        "💳 Pago con tarjeta Santander<br>" +
+        "🛡 Seguro de vida<br>" +
+        "📍 Empresa ubicada cerca del Campo Militar",
+        "bot"
+      );
 
-addMessage(
-  "📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.",
-  "bot"
-);
+      addMessage(
+        "📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.",
+        "bot"
+      );
 
-addMessage(
-  "¿Te interesa alguna de estas vacantes? Por favor responde con:<br>" +
-  "1️⃣ Sorteador@<br>" +
-  "2️⃣ Ayudante General<br>" +
-  "3️⃣ Operador de Máquinas<br>" +
-  "4️⃣ Solo quiero más información",
-  "bot"
-);
+      addMessage(
+        "¿Te interesa alguna de estas vacantes? Por favor responde con:<br>" +
+        "1️⃣ Sorteador@<br>" +
+        "2️⃣ Ayudante General<br>" +
+        "3️⃣ Operador de Máquinas<br>" +
+        "4️⃣ Solo quiero más información",
+        "bot"
+      );
 
       currentIndex = questions.length;
     }
