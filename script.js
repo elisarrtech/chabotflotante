@@ -5,6 +5,7 @@ const chatWindow = document.getElementById('chatbotWindow');
 const messagesContainer = document.getElementById('chatbotMessages');
 const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
+const closeBtn = document.getElementById('chatbotClose'); // 👈 NUEVA LÍNEA
 
 let questions = [];
 let currentIndex = -3;
@@ -18,6 +19,10 @@ btn.addEventListener('click', () => {
   }
 });
 
+// 👇 NUEVO EVENTO PARA CERRAR EL CHAT
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+});
 
 function addMessage(text, sender = 'bot') {
   const msg = document.createElement('div');
@@ -265,6 +270,7 @@ async function submitAnswers() {
     addMessage('❌ Error enviando respuestas. Intenta más tarde.', 'bot');
   }
 }
+
 // Hacer que el chat se abra automáticamente al cargar la página
 window.addEventListener('load', () => {
   chatWindow.style.display = 'flex';
