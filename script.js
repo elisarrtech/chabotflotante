@@ -130,6 +130,8 @@ async function sendAnswer(answer) {
       const edad = parseInt(answer);
       if (isNaN(edad) || edad < 18 || edad > 55) {
         addMessage("Gracias por tu interés 😊. Para esta vacante, buscamos personas entre 18 y 55 años. ¡Te invitamos a estar pendiente de futuras oportunidades!", "bot");
+        input.disabled = true;
+        sendBtn.disabled = true;
         return;
       }
     }
@@ -297,4 +299,3 @@ window.addEventListener('load', () => {
     startChat();
   }
 });
-
