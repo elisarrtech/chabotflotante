@@ -4,47 +4,8 @@ const chatWindow = document.getElementById('chatbotWindow');
 const messagesContainer = document.getElementById('chatbotMessages');
 const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
-const closeBtn = document.getElementById('chatbotClose');
 const restartBtn = document.getElementById('chatbotRestartBtn');
 
-// Botón para volver a abrir el chat si lo cierran
-const openChatBtn = document.createElement('button');
-openChatBtn.innerHTML = '💬';
-openChatBtn.id = 'chatbotOpenAgain';
-openChatBtn.style.position = 'fixed';
-openChatBtn.style.bottom = '25px';
-openChatBtn.style.right = '25px';
-openChatBtn.style.backgroundColor = '#61CE70';
-openChatBtn.style.color = 'white';
-openChatBtn.style.borderRadius = '50%';
-openChatBtn.style.width = '60px';
-openChatBtn.style.height = '60px';
-openChatBtn.style.fontSize = '30px';
-openChatBtn.style.border = 'none';
-openChatBtn.style.cursor = 'pointer';
-openChatBtn.style.boxShadow = '0 4px 8px rgba(0,0,0,0.3)';
-openChatBtn.style.zIndex = '1000';
-openChatBtn.style.display = 'none'; // Oculto por defecto
-
-document.body.appendChild(openChatBtn);
-
-openChatBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'flex';
-  openChatBtn.style.display = 'none';
-  input.focus();
-});
-
-closeBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'none';
-  openChatBtn.style.display = 'block';
-});
-
-// Reiniciar chat
-restartBtn.addEventListener('click', () => {
-  resetChat();
-});
-
-// Variables y flujo del chatbot
 let questions = [];
 let currentIndex = -3;
 const answers = {};
@@ -157,9 +118,7 @@ async function sendAnswer(answer) {
     if (currentIndex < questions.length) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
-      // Mensajes finales con vacantes
       addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
-      // ... Aquí siguen los mensajes de vacantes (idénticos a los que ya tienes) ...
       addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Sorteador@<br>2️⃣ Ayudante General<br>3️⃣ Operador de Máquinas<br>4️⃣ Solo quiero más información", "bot");
       currentIndex = questions.length;
     }
@@ -213,9 +172,8 @@ function resetChat() {
   startChat();
 }
 
-// Iniciar chat automáticamente
 window.addEventListener('load', () => {
-  chatWindow.style.display = 'flex';
+  chatWindow.style.display = 'flex'; // Siempre visible
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
@@ -241,4 +199,8 @@ sendBtn.addEventListener('click', async () => {
 
   await sendAnswer(text);
   input.value = "";
+});
+
+restartBtn.addEventListener('click', () => {
+  resetChat();
 });
