@@ -27,14 +27,14 @@
 /* Ventana de chat */
 #chatbotWindow {
   position: fixed;
-  bottom: 95px;
+  bottom: 25px;
   right: 25px;
-  width: 400px; /* aumentado de 360 para más espacio */
+  width: 400px;
   max-height: 520px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  display: flex;
+  display: flex; /* siempre visible */
   flex-direction: column;
   overflow: hidden;
   font-family: 'Roboto', sans-serif;
@@ -179,14 +179,15 @@
 }
 
 /* --------------------- */
-/* Responsivo para móvil */
+/* Responsivo móvil */
 @media (max-width: 400px) {
   #chatbotWindow {
     width: 90vw;
     right: 5vw;
-    bottom: 95px;
+    bottom: 20px;
     max-height: 60vh;
   }
+}
 
   #chatbotButton {
     width: 50px;
