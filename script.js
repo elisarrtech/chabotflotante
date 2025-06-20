@@ -265,3 +265,11 @@ async function submitAnswers() {
     addMessage('❌ Error enviando respuestas. Intenta más tarde.', 'bot');
   }
 }
+// Hacer que el chat se abra automáticamente al cargar la página
+window.addEventListener('load', () => {
+  chatWindow.style.display = 'flex';
+  input.focus();
+  if (messagesContainer.innerHTML === '') {
+    startChat();
+  }
+});
