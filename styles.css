@@ -39,6 +39,24 @@
   font-family: 'Roboto', sans-serif;
 }
 
+/* Botón cerrar */
+#chatbotClose {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  padding: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+#chatbotClose:hover {
+  color: #d1d1d1;
+}
+
 /* Área mensajes */
 #chatbotMessages {
   flex: 1;
@@ -165,5 +183,4 @@
     max-height: 60vh;
   }
 }
-
 
