@@ -219,3 +219,20 @@ window.addEventListener('load', () => {
   }
 });
 
+function resetChat() {
+  messagesContainer.innerHTML = '';
+  input.disabled = false;
+  sendBtn.disabled = false;
+  input.value = '';
+  questions = [];
+  currentIndex = -3;
+  for (const key in answers) delete answers[key];
+  startChat();
+}
+const restartBtn = document.getElementById('chatbotRestartBtn');
+if (restartBtn) {
+  restartBtn.addEventListener('click', () => {
+    resetChat();
+  });
+}
+
