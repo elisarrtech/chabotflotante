@@ -10,15 +10,6 @@ let questions = [];
 let currentIndex = -3;  // Estados: -3: inicio, -2: preguntar tiempo, -1: preguntar nombre, 0+: preguntas API
 const answers = {};
 
-// Abrir el chatbot automáticamente al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  chatWindow.style.display = 'flex';
-  input.focus();
-  if (messagesContainer.innerHTML === '') {
-    startChat();
-  }
-});
-
 btn.addEventListener('click', () => {
   if (chatWindow.style.display === 'flex') {
     chatWindow.style.display = 'none';
@@ -73,7 +64,7 @@ async function startChat() {
   addMessage("¡Hola! 👋 Gracias por tu interés en una vacante con MatchStaff.");
   addMessage("Voy a hacerte unas preguntas para conocer mejor tu perfil. Comencemos. 😊");
   addMessage("📌 *Nota:* Las vacantes disponibles actualmente son para trabajar cerca de la empresa Kellogg’s. Por el momento no contamos con transporte, por lo que es importante saber qué tan lejos te encuentras del lugar para evaluar si es viable para ti.");
-  addMessage("¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s? (Responde en minutos).");
+  addMessage("¿Aproximadamente cuánto tiempo haces desde tu domicilio hasta la empresa Kellogg’s? (Responder en minutos).");
   currentIndex = -2; // Estado para pedir tiempo
 }
 
@@ -88,8 +79,8 @@ async function sendAnswer(answer) {
     }
     answers["tiempo_kelloggs"] = answer;
 
-    if (time > 30) {
-      addMessage("Lo siento, las vacantes que tenemos son sólo para personas que vivan a menos de 30 minutos de Kellogg’s. Te agradecemos tu interés y te invitamos a estar pendiente de futuras oportunidades.", "bot");
+    if (time > 40) {
+      addMessage("Lo siento, las vacantes que tenemos son sólo para personas que vivan a menos de 40 minutos de Kellogg’s. Te agradecemos tu interés y te invitamos a estar pendiente de futuras oportunidades.", "bot");
       input.disabled = true;
       sendBtn.disabled = true;
       return;
@@ -122,10 +113,11 @@ async function sendAnswer(answer) {
     } else {
       // Cuando terminan preguntas, mostramos vacantes
       addMessage("📣 Tenemos dos opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar). Ambas vacantes NO cuentan con transporte.", "bot");
-      addMessage("🔶 <b>1. PALETIZADOR</b><br>💲 Sueldo semanal: $2,355<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $211 semanal<br>🛍 Vales de despensa: $1,020 mensual<br>📚 Escolaridad requerida: PREPARATORIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $2,013<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
+      addMessage("🔶 <b>1. SORTEADOR@</b><br>💲 Sueldo semanal: $2,355<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $211 semanal<br>🛍 Vales de despensa: $1,020 mensual<br>📚 Escolaridad requerida: PREPARATORIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $2,013<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
       addMessage("🔹 <b>2. AYUDANTE GENERAL</b><br>💲 Sueldo semanal libre: $1,800 aprox<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $200 semanal<br>🛍 Vales de despensa: $892.70 mensual<br>📚 Escolaridad requerida: PRIMARIA<br>🍽 Comedor 100% pagado<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $1,785<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida", "bot");
+      addMessage("🔸 <b>3. OPERADOR DE MÁQUINAS CNC - PLC</b><br>💲 Sueldo semanal bruto: $2,550<br>📆 Semana desfasada<br>💼 75% prima vacacional<br>🎄 30 días de aguinaldo<br>💰 Fondo de ahorro: $230 semanal<br>🛍 Vales de despensa: $1,020 mensual<br>📚 Escolaridad requerida: PREPARATORIA<br>🍽 Comedor 100% pagado<br>➕ Tiempo extra<br>💳 Pago con tarjeta Santander<br>🛡 Seguro de vida<br>⏰ Turnos 4x3 (12 horas)<br>💊 Doping obligatorio<br>🎁 Bono de asistencia: $2,040<br>📍 Empresa ubicada cerca del Campo Militar", "bot");
       addMessage("📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.", "bot");
-      addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Paletizador<br>2️⃣ Ayudante general<br>3️⃣ Ambas vacantes<br>4️⃣ Solo quiero más información", "bot");
+      addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Sorteador@ <br>2️⃣ Ayudante general<br>3️⃣ Operador Máquinas CNC <br>4️⃣ Solo quiero más información", "bot");
 
       currentIndex = questions.length; // Estado para selección de vacantes
     }
@@ -137,7 +129,7 @@ async function sendAnswer(answer) {
       const respuestasVacante = {
         "1": "¡Genial! Te interesa la vacante de Paletizador.",
         "2": "Perfecto, estás interesado en Ayudante General.",
-        "3": "Excelente, te interesan ambas vacantes.",
+        "3": "Excelente, te interesa la vacante de Operador CNC.",
         "4": "Claro, te enviaremos más información pronto."
       };
       addMessage(respuestasVacante[answer], "bot");
