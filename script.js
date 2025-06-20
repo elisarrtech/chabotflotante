@@ -11,16 +11,13 @@ let currentIndex = -3;
 const answers = {};
 
 btn.addEventListener('click', () => {
-  if (chatWindow.style.display === 'flex') {
-    chatWindow.style.display = 'none';
-  } else {
-    chatWindow.style.display = 'flex';
-    input.focus();
-    if (messagesContainer.innerHTML === '') {
-      startChat();
-    }
+  chatWindow.style.display = 'flex';
+  input.focus();
+  if (messagesContainer.innerHTML === '') {
+    startChat();
   }
 });
+
 
 function addMessage(text, sender = 'bot') {
   const msg = document.createElement('div');
