@@ -1,5 +1,6 @@
 const apiUrl = "https://chatboterr-3cbv.onrender.com";
 
+// Elementos del DOM
 const btn = document.getElementById('chatbotButton');
 const chatWindow = document.getElementById('chatbotWindow');
 const messagesContainer = document.getElementById('chatbotMessages');
@@ -7,46 +8,67 @@ const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 const closeBtn = document.getElementById('chatbotClose');
 const restartBtn = document.getElementById('chatbotRestartBtn');
+const overlay = document.getElementById('chatbotOverlay');
 
 let questions = [];
 let currentIndex = -3;
 const answers = {};
 
-if (closeBtn) {
-  closeBtn.addEventListener('click', () => {
-    chatWindow.style.display = 'none';
-  });
-}
-
+// Mostrar ventana del chat
 btn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
+  overlay.style.display = 'block';
+  btn.style.display = 'none';
   input.focus();
+
   if (messagesContainer.innerHTML === '') {
     startChat();
   }
 });
 
-if (restartBtn) {
-  restartBtn.addEventListener('click', () => {
-    resetChat();
-  });
-}
+// Cerrar ventana del chat
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+  overlay.style.display = 'none';
+  btn.style.display = 'block';
+});
 
-function addMessage(text, sender = 'bot') {
-  const msg = document.createElement('div');
-  msg.classList.add('message', sender);
-  if(sender === 'bot'){
-    let formatted = text
-      .replace(/\n/g, '<br>')
-      .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-    msg.innerHTML = formatted;
-  } else {
-    msg.textContent = text;
+// También cerrar al dar clic sobre el overlay
+overlay.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+  overlay.style.display = 'none';
+  btn.style.display = 'block';
+});
+
+// Reiniciar chat
+restartBtn.addEventListener('click', () => {
+  resetChat();
+});
+
+// Enviar con botón
+sendBtn.addEventListener('click', async () => {
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (input.disabled) {
+    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
+    input.value = "";
+    return;
   }
-  messagesContainer.appendChild(msg);
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
 
+  await sendAnswer(text);
+  input.value = "";
+});
+
+// Enviar con Enter
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
+    e.preventDefault();
+    sendBtn.click();
+  }
+});
+
+// Cargar preguntas desde backend
 async function loadQuestions() {
   try {
     const res = await fetch(`${apiUrl}/get_questions`);
@@ -58,14 +80,22 @@ async function loadQuestions() {
   }
 }
 
+function addMessage(text, sender = 'bot') {
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender);
+  msg.innerHTML = sender === 'bot'
+    ? text.replace(/\n/g, '<br>').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    : text;
+  messagesContainer.appendChild(msg);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
 function parseTime(answer) {
   let lower = answer.toLowerCase();
   let num = answer.match(/\d+/);
   if (!num) return null;
   num = parseInt(num[0]);
-  if (lower.includes('km')) {
-    num = num * 2;
-  }
+  if (lower.includes('km')) num *= 2;
   return num;
 }
 
@@ -100,7 +130,6 @@ async function sendAnswer(answer) {
   } else if (currentIndex === -1) {
     answers["nombre"] = answer;
     addMessage(answer, "user");
-
     addMessage("Gracias. Ahora, por favor indícame tu número de teléfono (10 dígitos):", "bot");
     currentIndex = -0.5;
 
@@ -143,84 +172,10 @@ async function sendAnswer(answer) {
     if (currentIndex < questions.length) {
       addMessage(questions[currentIndex].pregunta, "bot");
     } else {
-      addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
-
-      addMessage(
-        "🔶 <b>1. SORTEADOR@</b><br>" +
-        "💲 Sueldo semanal bruto: $2,550<br>" +
-        "📆 Semana desfasada<br>" +
-        "💼 75% prima vacacional<br>" +
-        "🎄 30 días de aguinaldo<br>" +
-        "💰 Fondo de ahorro: $229.50 semanal<br>" +
-        "🎁 Bono de asistencia mensual: $2,040<br>" +
-        "🛍 Vales de despensa: $1,020 mensual<br>" +
-        "📚 Escolaridad requerida: PREPARATORIA<br>" +
-        "🍽 Comedor 100% pagado<br>" +
-        "➕ Tiempo extra<br>" +
-        "⏰ Turnos 4x3 (12 horas)<br>" +
-        "💊 Doping obligatorio<br>" +
-        "💳 Pago con tarjeta Santander<br>" +
-        "🛡 Seguro de vida<br>" +
-        "📍 Empresa ubicada cerca del Campo Militar",
-        "bot"
-      );
-
-      addMessage(
-        "🔹 <b>2. AYUDANTE GENERAL</b><br>" +
-        "💲 Sueldo semanal bruto: $2,232<br>" +
-        "📆 Semana desfasada<br>" +
-        "💼 75% prima vacacional<br>" +
-        "🎄 30 días de aguinaldo<br>" +
-        "💰 Fondo de ahorro: $201 semanal<br>" +
-        "🛍 Vales de despensa: $892.59 mensual<br>" +
-        "📚 Escolaridad requerida: PRIMARIA<br>" +
-        "🍽 Comedor 100% pagado<br>" +
-        "➕ Tiempo extra<br>" +
-        "⏰ Turnos 4x3 (12 horas)<br>" +
-        "💊 Doping obligatorio<br>" +
-        "🎁 Bono de asistencia: $1,785<br>" +
-        "💳 Pago con tarjeta Santander<br>" +
-        "🛡 Seguro de vida<br>" +
-        "📍 Empresa ubicada cerca del Campo Militar",
-        "bot"
-      );
-
-      addMessage(
-        "🔸 <b>3. OPERADOR DE MÁQUINAS</b><br>" +
-        "💲 Sueldo semanal bruto: $2,933<br>" +
-        "📆 Semana desfasada<br>" +
-        "💼 75% prima vacacional<br>" +
-        "🎄 30 días de aguinaldo<br>" +
-        "💰 Fondo de ahorro: $264 semanal<br>" +
-        "🛍 Vales de despensa: $1,173 mensual<br>" +
-        "📚 Escolaridad requerida: PREPARATORIA<br>" +
-        "🍽 Comedor 100% pagado<br>" +
-        "➕ Tiempo extra<br>" +
-        "⏰ Turnos 4x3 (12 horas)<br>" +
-        "💊 Doping obligatorio<br>" +
-        "🎁 Bono de asistencia: $2,346<br>" +
-        "💳 Pago con tarjeta Santander<br>" +
-        "🛡 Seguro de vida<br>" +
-        "📍 Empresa ubicada cerca del Campo Militar",
-        "bot"
-      );
-
-      addMessage(
-        "📍<b>IMPORTANTE:</b> Por el momento NO contamos con transporte para estas vacantes. Es fundamental saber en dónde vives para valorar tu posible traslado.",
-        "bot"
-      );
-
-      addMessage(
-        "¿Te interesa alguna de estas vacantes? Por favor responde con:<br>" +
-        "1️⃣ Sorteador@<br>" +
-        "2️⃣ Ayudante General<br>" +
-        "3️⃣ Operador de Máquinas<br>" +
-        "4️⃣ Solo quiero más información",
-        "bot"
-      );
-
+      mostrarVacantes();
       currentIndex = questions.length;
     }
+
   } else if (currentIndex === questions.length) {
     addMessage(answer, "user");
 
@@ -235,7 +190,6 @@ async function sendAnswer(answer) {
       addMessage("Muchas gracias por tu interés. Te contactaremos pronto con más detalles.", "bot");
 
       answers["vacante_interes"] = respuestasVacante[answer];
-
       await submitAnswers();
 
       input.disabled = true;
@@ -246,26 +200,56 @@ async function sendAnswer(answer) {
   }
 }
 
-sendBtn.addEventListener('click', async () => {
-  const text = input.value.trim();
-  if (!text) return;
+function mostrarVacantes() {
+  const vacantes = [
+    {
+      titulo: "SORTEADOR@",
+      sueldo: "$2,550",
+      escolaridad: "PREPARATORIA",
+      bono: "$2,040",
+      fondo: "$229.50 semanal",
+      vales: "$1,020 mensual"
+    },
+    {
+      titulo: "AYUDANTE GENERAL",
+      sueldo: "$2,232",
+      escolaridad: "PRIMARIA",
+      bono: "$1,785",
+      fondo: "$201 semanal",
+      vales: "$892.59 mensual"
+    },
+    {
+      titulo: "OPERADOR DE MÁQUINAS",
+      sueldo: "$2,933",
+      escolaridad: "PREPARATORIA",
+      bono: "$2,346",
+      fondo: "$264 semanal",
+      vales: "$1,173 mensual"
+    }
+  ];
 
-  if (input.disabled) {
-    addMessage("El chat ha finalizado. Por favor recarga la página para iniciar de nuevo.", "bot");
-    input.value = "";
-    return;
-  }
+  addMessage("📣 Tenemos tres opciones laborales para ti, cerca de la empresa <b>Kellogg’s</b> (ubicada cerca del Campo Militar).<br><br>⚠️ <b>IMPORTANTE:</b> Ninguna vacante cuenta con transporte.", "bot");
 
-  await sendAnswer(text);
-  input.value = "";
-});
+  vacantes.forEach(v => {
+    addMessage(
+      `🔹 <b>${v.titulo}</b><br>` +
+      `💲 Sueldo semanal bruto: ${v.sueldo}<br>` +
+      `📚 Escolaridad requerida: ${v.escolaridad}<br>` +
+      `🎁 Bono de asistencia: ${v.bono}<br>` +
+      `💰 Fondo de ahorro: ${v.fondo}<br>` +
+      `🛍 Vales de despensa: ${v.vales}<br>` +
+      `🍽 Comedor 100% pagado<br>` +
+      `➕ Tiempo extra<br>` +
+      `⏰ Turnos 4x3 (12 horas)<br>` +
+      `💳 Pago con tarjeta Santander<br>` +
+      `🛡 Seguro de vida<br>` +
+      `📍 Empresa ubicada cerca del Campo Militar`,
+      "bot"
+    );
+  });
 
-input.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !input.disabled && !sendBtn.disabled) {
-    e.preventDefault();
-    sendBtn.click();
-  }
-});
+  addMessage("¿Te interesa alguna de estas vacantes? Por favor responde con:<br>1️⃣ Sorteador@<br>2️⃣ Ayudante General<br>3️⃣ Operador de Máquinas<br>4️⃣ Solo quiero más información", "bot");
+}
 
 async function submitAnswers() {
   try {
@@ -292,25 +276,3 @@ function resetChat() {
   startChat();
 }
 
-window.addEventListener('load', () => {
-  chatWindow.style.display = 'flex';
-  input.focus();
-  if (messagesContainer.innerHTML === '') {
-    startChat();
-  }
-});
-
-
-const btn = document.getElementById('chatbotButton');
-const chatWindow = document.getElementById('chatbotWindow');
-const closeBtn = document.getElementById('chatbotClose');
-
-btn.addEventListener('click', () => {
-  chatWindow.style.display = 'flex';
-  document.getElementById('chatbotInput').focus();
-  // Aquí llamas a startChat() o la función para iniciar el chat
-});
-
-closeBtn.addEventListener('click', () => {
-  chatWindow.style.display = 'none';
-});
