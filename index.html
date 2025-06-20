@@ -9,12 +9,15 @@
 </head>
 <body>
 
-<!-- Chat siempre visible -->
+<!-- Ventana del chatbot -->
 <div id="chatbotWindow" role="dialog" aria-labelledby="chatbotHeader">
   <div id="chatbotHeader" style="display:flex; align-items:center; gap:10px;">
-    <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
+    <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;" />
     <span>Chatbot MatchStaff</span>
-    <!-- Botón cerrar eliminado para siempre visible -->
+    <button id="chatbotClose" aria-label="Cerrar chat" title="Cerrar chat"
+            style="margin-left:auto; background:none; border:none; color:white; font-size:20px; cursor:pointer; font-family: 'Roboto', sans-serif; padding:0; line-height:1; user-select:none;">
+      ✖
+    </button>
   </div>
 
   <div id="chatbotMessages" aria-live="polite" aria-atomic="true"></div>
