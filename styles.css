@@ -1,49 +1,133 @@
+/* Importar Roboto desde Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-body { margin: 0; font-family: 'Roboto', sans-serif; }
 
 /* Botón flotante */
 #chatbotButton {
-  position: fixed; bottom: 25px; right: 25px;
-  width: 60px; height: 60px; border: none; border-radius: 50%;
-  background: #61CE70; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  cursor: pointer; z-index: 1000;
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background-color: #61CE70; /* verde Matchstaff actualizado */
+  color: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+  font-family: 'Roboto', sans-serif;
 }
-#chatbotButton img { width: 28px; height: 28px; }
 
-/* Chat window */
+/* Ventana de chat */
 #chatbotWindow {
-  display: none; position: fixed; bottom: 95px; right: 25px;
-  width: 90vw; max-width: 360px; max-height: 60vh;
-  background: #fff; border-radius: 8px; box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  flex-direction: column; overflow: hidden; z-index: 1000;
+  position: fixed;
+  bottom: 95px;
+  right: 25px;
+  width: 360px;
+  max-height: 520px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  z-index: 1000;
 }
+
+/* Header */
 #chatbotHeader {
-  background: #61CE70; color: #fff; padding: 12px;
-  display: flex; align-items: center;
+  background-color: #61CE70; /* verde Matchstaff actualizado */
+  color: white;
+  padding: 12px 16px;
+  font-weight: bold;
+  font-size: 18px;
+  user-select: none;
+  font-family: 'Roboto', sans-serif;
 }
-#chatbotHeader img { width: 28px; height: 28px; margin-right: 8px; }
-#chatbotHeader button {
-  margin-left: auto; background: none; border: none;
-  color: #fff; font-size: 18px; cursor: pointer;
-}
+
+/* Área mensajes */
 #chatbotMessages {
-  flex: 1; padding: 10px; overflow-y: auto; background: #f9f9f9;
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  font-family: 'Roboto', sans-serif;
 }
+
+/* Input y botón enviar */
 #chatbotInputArea {
-  display: flex; padding: 10px; border-top: 1px solid #ccc;
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+  font-family: 'Roboto', sans-serif;
 }
-#chatbotInput { flex: 1; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
-#chatbotSendBtn, #chatbotRestartBtn {
-  margin-left: 8px; padding: 8px 12px; border: none;
-  background: #61CE70; color: white; border-radius: 4px; cursor: pointer;
+
+#chatbotInput {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  font-family: 'Roboto', sans-serif;
 }
-#chatbotRestartBtn { background: #ccc; color: black; }
-#chatbotSendBtn:hover { background: #50b25d; }
-#chatbotRestartBtn:hover { background: #999; color: #fff; }
+
+#chatbotSendBtn {
+  margin-left: 10px;
+  background-color: #61CE70; /* verde Matchstaff actualizado */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+}
 
 /* Mensajes */
-.message { margin: 8px 0; padding: 8px; border-radius: 12px; max-width: 80%; animation: fadeIn 0.2s; }
-.bot { background: #e1e1e1; align-self: flex-start; }
-.user { background: #61CE70; color: #fff; align-self: flex-end; }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95) } to { opacity: 1; transform: scale(1) } }
+.message {
+  margin: 8px 0;
+  max-width: 80%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  clear: both;
+  word-wrap: break-word;
+  font-family: 'Roboto', sans-serif;
+}
+
+.message.bot {
+  background-color: #e1e1e1;
+  float: left;
+  border-bottom-left-radius: 0;
+}
+
+.message.user {
+  background-color: #61CE70; /* verde Matchstaff actualizado */
+  color: white;
+  float: right;
+  border-bottom-right-radius: 0;
+}
+
+/* --------------------- */
+/* Responsivo para móvil */
+@media (max-width: 400px) {
+  #chatbotWindow {
+    width: 90vw;        /* 90% del ancho de la pantalla */
+    right: 5vw;         /* 5% del ancho para margen a la derecha */
+    bottom: 95px;
+    max-height: 60vh;   /* 60% de la altura de la pantalla */
+  }
+  
+  #chatbotButton {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    right: 5vw;
+    bottom: 20px;
+  }
+}
 
