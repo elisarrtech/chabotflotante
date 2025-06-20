@@ -41,10 +41,7 @@ openChatBtn.addEventListener('click', () => {
 closeBtn.addEventListener('click', () => {
   chatWindow.style.display = 'none';
   openChatBtn.style.display = 'block';
-
- 
 });
-
 
 let questions = [];
 let currentIndex = -3;
@@ -215,7 +212,7 @@ function resetChat() {
 window.addEventListener('load', () => {
   chatWindow.style.display = 'flex';
   openChatBtn.style.display = 'none';
-  overlay.style.display = 'none';
+  // overlay.style.display = 'none';  <-- línea eliminada
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
@@ -246,3 +243,4 @@ sendBtn.addEventListener('click', async () => {
 restartBtn.addEventListener('click', () => {
   resetChat();
 });
+
