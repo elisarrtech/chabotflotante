@@ -6,31 +6,43 @@
   <title>Chatbot Matchstaff</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="img/MATCH-STAFF-1.png" type="image/png" />
+  <!-- Fuente Roboto incluida desde CSS -->
 </head>
 <body>
 
-<!-- BOTÓN FLOTANTE CON SOLO LOGO -->
+<!-- BOTÓN FLOTANTE -->
 <button id="chatbotButton" aria-label="Abrir chat">
   <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
 </button>
 
-<!-- VENTANA DEL CHAT -->
+<!-- VENTANA DE CHAT -->
 <div id="chatbotWindow" role="dialog" aria-modal="true" aria-labelledby="chatbotHeader">
-  <div id="chatbotHeader" style="display:flex; align-items:center; gap:10px;">
+
+  <!-- ENCABEZADO -->
+  <div id="chatbotHeader">
     <img src="img/MATCH-STAFF-1.png" alt="Logo MatchStaff" style="width:28px; height:28px;">
     <span>Chatbot MatchStaff</span>
-    <button id="chatbotClose" aria-label="Cerrar" style="margin-left:auto; background:none; border:none; color:white; font-size:18px; cursor:pointer;">✖</button>
+    <button id="chatbotClose" aria-label="Cerrar">✖</button>
   </div>
 
+  <!-- MENSAJES DEL CHAT -->
   <div id="chatbotMessages" aria-live="polite" aria-atomic="true"></div>
 
+  <!-- MENSAJE TIPO “ESCRIBIENDO…” (se inserta con JS cuando lo necesites) -->
+  <!-- <div class="typing">Escribiendo...</div> -->
+
+  <!-- ÁREA DE INPUT -->
   <div id="chatbotInputArea">
     <input id="chatbotInput" type="text" placeholder="Escribe tu respuesta..." aria-label="Entrada de texto" autocomplete="off" />
     <button id="chatbotSendBtn" aria-label="Enviar mensaje">Enviar</button>
   </div>
+
+  <!-- BOTÓN DE REINICIO (puedes mostrarlo vía JS al final del flujo si lo usas) -->
+  <!-- <button class="restartBtn" onclick="location.reload()">Reiniciar chat</button> -->
+
 </div>
 
-<!-- Script principal -->
+<!-- SCRIPT PRINCIPAL -->
 <script src="script.js"></script>
 
 </body>
