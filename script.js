@@ -299,3 +299,18 @@ window.addEventListener('load', () => {
     startChat();
   }
 });
+
+
+const btn = document.getElementById('chatbotButton');
+const chatWindow = document.getElementById('chatbotWindow');
+const closeBtn = document.getElementById('chatbotClose');
+
+btn.addEventListener('click', () => {
+  chatWindow.style.display = 'flex';
+  document.getElementById('chatbotInput').focus();
+  // Aquí llamas a startChat() o la función para iniciar el chat
+});
+
+closeBtn.addEventListener('click', () => {
+  chatWindow.style.display = 'none';
+});
