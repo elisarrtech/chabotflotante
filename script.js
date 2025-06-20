@@ -6,7 +6,7 @@ const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 const restartBtn = document.getElementById('chatbotRestartBtn');
 const closeBtn = document.getElementById('chatbotClose');
-const overlay = document.getElementById('chatOverlay');
+
 
 // Crear botón flotante para reabrir el chat
 const openChatBtn = document.createElement('button');
@@ -35,8 +35,7 @@ openChatBtn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
   openChatBtn.style.display = 'none';
 
-  // Mostrar overlay solo si quieres sombra oscura detrás
-  overlay.style.display = 'block';
+
 
   input.focus();
 });
@@ -46,8 +45,7 @@ closeBtn.addEventListener('click', () => {
   chatWindow.style.display = 'none';
   openChatBtn.style.display = 'block';
 
-  // Ocultar overlay para que no bloquee nada en la página
-  overlay.style.display = 'none';
+ 
 });
 
 
