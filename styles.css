@@ -39,17 +39,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-#chatOverlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.3); /* sombra oscura semitransparente */
-  z-index: 900; /* menos que el chatbot que tiene 1000 */
-  display: none; /* oculto por defecto */
-}
-
-
 /* Botón cerrar */
 #chatbotClose {
   margin-left: auto;
