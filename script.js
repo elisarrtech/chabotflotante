@@ -182,9 +182,9 @@ async function submitAnswers() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ data: Object.values(answers) })
     });
-    const data = await res.json();
-    addMessage(data.message || 'Respuestas guardadas en Google Sheets.', 'bot');
+    await res.json();
+    addMessage('✅ Datos guardados correctamente.', 'bot');
   } catch {
-    addMessage('Error enviando respuestas a Google Sheets. Intenta más tarde.', 'bot');
+    addMessage('❌ Error enviando respuestas. Intenta más tarde.', 'bot');
   }
 }
