@@ -6,9 +6,9 @@ const input = document.getElementById('chatbotInput');
 const sendBtn = document.getElementById('chatbotSendBtn');
 const restartBtn = document.getElementById('chatbotRestartBtn');
 const closeBtn = document.getElementById('chatbotClose');
-const chatOverlay = document.getElementById('chatOverlay');
+const overlay = document.getElementById('chatOverlay');
 
-// Crear botón flotante para reabrir el chat cuando está cerrado
+// Crear botón flotante para reabrir el chat
 const openChatBtn = document.createElement('button');
 openChatBtn.id = 'chatbotOpenBtn';
 openChatBtn.innerHTML = '💬';
@@ -26,27 +26,25 @@ Object.assign(openChatBtn.style, {
   cursor: 'pointer',
   boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
   zIndex: '1000',
-  display: 'none', // oculto al inicio
+  display: 'none',
   fontFamily: "'Roboto', sans-serif",
 });
 document.body.appendChild(openChatBtn);
 
-function openChat() {
+// Abrir el chat
+openChatBtn.addEventListener('click', () => {
   chatWindow.style.display = 'flex';
-  chatOverlay.style.display = 'block';
   openChatBtn.style.display = 'none';
+  overlay.style.display = 'none'; // ya no se usa en este flujo
   input.focus();
-}
+});
 
-function closeChat() {
+// Cerrar el chat
+closeBtn.addEventListener('click', () => {
   chatWindow.style.display = 'none';
-  chatOverlay.style.display = 'none';
   openChatBtn.style.display = 'block';
-}
-
-openChatBtn.addEventListener('click', openChat);
-closeBtn.addEventListener('click', closeChat);
-chatOverlay.addEventListener('click', closeChat);
+  overlay.style.display = 'none'; // 🔧 importante para quitar sombra/overlay
+});
 
 let questions = [];
 let currentIndex = -3;
@@ -215,8 +213,9 @@ function resetChat() {
 }
 
 window.addEventListener('load', () => {
-  chatWindow.style.display = 'flex'; // Siempre visible al cargar
-  chatOverlay.style.display = 'block'; // Mostrar overlay al inicio
+  chatWindow.style.display = 'flex';
+  openChatBtn.style.display = 'none';
+  overlay.style.display = 'none';
   input.focus();
   if (messagesContainer.innerHTML === '') {
     startChat();
