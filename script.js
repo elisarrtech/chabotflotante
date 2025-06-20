@@ -279,3 +279,12 @@ window.addEventListener('load', () => {
     startChat();
   }
 });
+
+// Permitir cerrar el chatbot con el botón ✖
+const closeBtn = document.getElementById('chatbotClose');
+if (closeBtn) {
+  closeBtn.addEventListener('click', () => {
+    chatWindow.style.display = 'none';
+  });
+}
+
